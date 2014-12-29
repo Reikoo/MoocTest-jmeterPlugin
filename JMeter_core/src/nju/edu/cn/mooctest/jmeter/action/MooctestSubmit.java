@@ -1,7 +1,6 @@
 package nju.edu.cn.mooctest.jmeter.action;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -17,7 +16,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.ActionNames;
@@ -30,17 +30,17 @@ import org.apache.jmeter.gui.util.EscapeDialog;
  * 
  */
 
-public class MooctestLogin implements Command {
+public class MooctestSubmit implements Command {
 	private static final Set<String> commandSet;
 
-    private static JDialog login;
+    private static JDialog submit;
     
-    private static final int heightper = 38;
-	private static final int widthper = 100;
+    private static final int height = 200;
+	private static final int width = 400;
 
     static {
         HashSet<String> commands = new HashSet<String>();
-        commands.add(ActionNames.MOOCTEST_LOGIN);
+        commands.add(ActionNames.MOOCTEST_SUBMIT);
         commandSet = Collections.unmodifiableSet(commands);
     }
 
@@ -51,8 +51,8 @@ public class MooctestLogin implements Command {
      */
     @Override
     public void doAction(ActionEvent e) {
-        if (e.getActionCommand().equals(ActionNames.MOOCTEST_LOGIN)) {
-            this.login();
+        if (e.getActionCommand().equals(ActionNames.MOOCTEST_SUBMIT)) {
+            this.submit();
         }
     }
 
@@ -61,7 +61,7 @@ public class MooctestLogin implements Command {
      */
     @Override
     public Set<String> getActionNames() {
-        return MooctestLogin.commandSet;
+        return MooctestSubmit.commandSet;
     }
 
     /**
@@ -69,50 +69,55 @@ public class MooctestLogin implements Command {
      * the product image and the copyright notice. The dialog box is centered
      * over the MainFrame.
      */
-    void login() {
+    void submit() {
         JFrame mainFrame = GuiPackage.getInstance().getMainFrame();
-        if (login == null) {
-            login = new EscapeDialog(mainFrame, "身份验证", false);
-            login.addMouseListener(new MouseAdapter() {
+        if (submit == null) {
+            submit = new EscapeDialog(mainFrame, "提交结果", false);
+            submit.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    login.setVisible(false);
+                    submit.setVisible(false);
                 }
             });
 
-            Container panel = login.getContentPane();
+            Container panel = submit.getContentPane();
             panel.setLayout(null);
-            panel.setSize(widthper*5, heightper*8);
+            panel.setSize(width, height);
             
-            JLabel label1 = new JLabel("请输入您的身份验证字串");
-    		label1.setBounds(panel.getWidth()*1/5, panel.getHeight()*1/8, widthper*2, heightper);
-    		JLabel label2 = new JLabel("身份验证: ");
-    		label2.setBounds(panel.getWidth()*1/5, panel.getHeight()*2/8, widthper*2, heightper);
-    		JTextField textField = new JTextField();
-    		textField.setBounds(panel.getWidth()*1/5, panel.getHeight()*3/7, widthper*3, 30);
+            JPanel infoPanel = new JPanel();
+            //infoPanel.setBackground(Color.white);
+            infoPanel.setLayout(new BorderLayout());
+            infoPanel.setBounds(width/18, 0, width*16/18, height/4);
+            JLabel label = new JLabel("是否提交考试结果？");
+            label.setHorizontalAlignment(SwingConstants.LEFT); 
+            infoPanel.add(label, BorderLayout.CENTER);
+            
+    		JPanel buttonPanel = new JPanel();
+    		buttonPanel.setBounds(0, panel.getHeight()/2, panel.getWidth(), panel.getHeight()/3);
+    		buttonPanel.setLayout(null);
     		JButton okButton = new JButton("OK");
-    		okButton.setBounds(panel.getWidth()*4/14, panel.getHeight()*5/8, widthper*5/6, 30);
-    		okButton.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// TODO 调用登录方法
-					
-				}
-			});
+    		okButton.setBounds(width*3/7, height/11, width/5, height/6);
+    		okButton.addActionListener(new ActionListener() {   			
+    			@Override
+    			public void actionPerformed(ActionEvent e) {
+    				System.out.println("OK");
+    				
+    				// TODO 在这儿进行上传，如果成功则弹出提示框
+    			}
+    		});
     		JButton cancelButton = new JButton("Cancel");
-    		cancelButton.setBounds(panel.getWidth()*8/15, panel.getHeight()*5/8, widthper*5/6, 30);
+    		cancelButton.setBounds(width*9/13, height/11, width/5, height/6);
     		cancelButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					login.setVisible(false);
+					submit.setVisible(false);
 				}
 			});
+    		buttonPanel.add(okButton);
+    		buttonPanel.add(cancelButton);
     		
-    		panel.add(label1);
-    		panel.add(label2);
-    		panel.add(textField);
-    		panel.add(okButton);
-    		panel.add(cancelButton);
+    		panel.add(infoPanel, BorderLayout.NORTH);
+    		panel.add(buttonPanel, BorderLayout.SOUTH);
         }
 
         // NOTE: these lines center the about dialog in the
@@ -121,10 +126,10 @@ public class MooctestLogin implements Command {
         // make this behave properly.
         Point p = mainFrame.getLocationOnScreen();
         Dimension d1 = mainFrame.getSize();
-        Dimension d2 = login.getSize();
-        login.setLocation(p.x + (d1.width - d2.width) / 2, p.y + (d1.height - d2.height) / 2);
-        login.setSize(widthper*5, heightper*8);
+        Dimension d2 = submit.getSize();
+        submit.setLocation(p.x + (d1.width - d2.width) / 2, p.y + (d1.height - d2.height) / 2);
+        submit.setSize(width, height);
         //login.pack();;
-        login.setVisible(true);
+        submit.setVisible(true);
     }
 }
