@@ -1,7 +1,5 @@
 package nju.edu.cn.mooctest.jmeter.action;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -23,6 +21,8 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.Command;
 import org.apache.jmeter.gui.util.EscapeDialog;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * 
@@ -96,7 +96,9 @@ public class MooctestLogin implements Command {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// TODO 调用登录方法
-					
+					//Logger log = LoggingManager.getLoggerForClass();
+					//log.info("Identify Verification: "+textField.getText());
+					login.setVisible(false);
 				}
 			});
     		JButton cancelButton = new JButton("Cancel");
