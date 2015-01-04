@@ -244,6 +244,13 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         // there's no harm it trying to enable it again.
         setEditEnabled(enabled);
     }
+    
+    //TODO to be checked
+    public void setMooctestLoginEnabled(boolean enabled) {
+    	if (loginMenuItem != null) {
+    		loginMenuItem.setEnabled(enabled);
+    	}
+    }
 
     /**
      * Creates the MenuBar for this application. I believe in my heart that this
