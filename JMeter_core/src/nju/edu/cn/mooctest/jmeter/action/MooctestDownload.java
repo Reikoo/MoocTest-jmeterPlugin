@@ -62,7 +62,7 @@ public class MooctestDownload implements Command{
 			// Check if in Exam Mode
 			if (ValidationUtil.isLogin() != null && ValidationUtil.isLogin().getUserMode() == UserMode.ADVENTURE.ordinal()){
 				// Already logged in as Adventure mode
-				JOptionPane.showMessageDialog(null, "已经登录通关模式，若需登录考试模式，请重启Eclipse！", "登录提示", 
+				JOptionPane.showMessageDialog(null, "已经登录通关模式，若需登录考试模式，请重启JMeter！", "登录提示", 
 						JOptionPane.YES_OPTION);
 			}
 			else if ((auth != null) && (auth.getToken().length() > 0) && (auth.getUserMode() == UserMode.EXAM.ordinal())) {
