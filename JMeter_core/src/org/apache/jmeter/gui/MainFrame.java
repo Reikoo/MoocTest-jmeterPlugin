@@ -312,6 +312,15 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     }
 
     /**
+     * Specify whether or not the Mooctest|Login menu item should be enabled.
+     * @param enabled
+     * 			  true if the menu item should be enabled, false otherwise
+     */
+    public void setMooctestLoginEnabled(boolean enabled) {
+    	menuBar.setMooctestLoginEnabled(enabled);
+    }
+    
+    /**
      * Close the currently selected menu.
      */
     public void closeMenu() {
