@@ -186,8 +186,7 @@ public class MooctestSubmit implements Command {
 					log.info("Submit ---examType: " + examType);
 					log.info("Submit ---stuStr: " + stuStr);
 					submitScript(jsonStr, stuStr, examType);
-					JOptionPane.showMessageDialog(null, "成功提交考试结果", "提交结果",
-							JOptionPane.PLAIN_MESSAGE);
+
 				}
 			} else {
 				// not logging in
@@ -206,58 +205,69 @@ public class MooctestSubmit implements Command {
 	private void submitScript(final String jsonStr, final String stuStr,
 			final int examType) {
 		Logger log = LoggingManager.getLoggerForClass();
-		JSONObject processDataJson = null;	// result json
-		
+		JSONObject processDataJson = null; // result json
+
 		HashMap<String, ProblemObject> problemMap = JsonDecoderUtil
 				.getProblems(jsonStr);
 		Set<String> ques = problemMap.keySet();
-		
+
 		// upload the file and get the address
 		JFileChooser fileChooser = new JFileChooser();
 		int option = fileChooser.showDialog(null, "选择文件");
-		if(option == JFileChooser.APPROVE_OPTION){
+		if (option == JFileChooser.APPROVE_OPTION) {
 			try {
 				// get script's address
 				String scriptURL = fileChooser.getSelectedFile().toString();
 				String scriptName = fileChooser.getSelectedFile().getName();
 				log.info("SubmitScript ---file address: " + scriptURL);
-				
+
 				// run script
 				processDataJson = runScript(scriptURL, ActionMode.SUBMIT);
-				
+
 				// submit script and result
-				String url = HttpConfig.HOST + HttpConfig.APP
-						+ "submit";
+				String url = HttpConfig.HOST + HttpConfig.APP + "submit";
 				String uploadedJsonString = null;
 				try {
-					uploadedJsonString = HttpUtil
-							.submitAnswerWithScore(
-									url,
-									stuStr,
-									scriptURL + "\\",
-									scriptName,
-									processDataJson.getJSONObject(
-											"score").toString());
+					uploadedJsonString = HttpUtil.submitAnswerWithScore(url,
+							stuStr, scriptURL + "\\", scriptName,
+							processDataJson.getJSONObject("score").toString());
+					if (uploadedJsonString != null) {
+						JOptionPane.showMessageDialog(null, "成功提交考试结果", "提交结果",
+								JOptionPane.PLAIN_MESSAGE);
+					}else{
+						
+					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				
+
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
 		}
 	}
-	
-	
+
 	/**
-	 *  Run script and generate result file
+	 * Run script and generate result file
 	 */
-	private JSONObject runScript(String scriptURL, ActionMode mode){
+	private JSONObject runScript(String scriptURL, ActionMode mode) {
 		// View TestProjectProcessor.process
 		// Can new a class called ProcessUtil
-		JSONObject processDataJson = null;
+		// Must guarantee pro_id, pro_name, sub_id etc. are correct
+		JSONObject processDataJson = new JSONObject();
+		JSONObject scoreJson = new JSONObject();
+		float finalScore = new Float(91.0);
+		String proIdStr = "6";
+		String proNameStr = "Sorting";
+		String subIdStr = "2";
+		String evalStandardIdStr = "3";
+		scoreJson.put("pro_id", proIdStr);
+		scoreJson.put("pro_name", proNameStr);
+		scoreJson.put("sub_id", subIdStr);
+		scoreJson.put("eval_standard_id", evalStandardIdStr);
+		scoreJson.put("score", new Float(finalScore).toString());
+		processDataJson.put("score", scoreJson);
 		return processDataJson;
 	}
 }
