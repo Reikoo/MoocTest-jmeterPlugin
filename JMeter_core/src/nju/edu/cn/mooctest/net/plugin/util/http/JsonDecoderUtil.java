@@ -315,5 +315,14 @@ public class JsonDecoderUtil {
 		
 		return stageNum;
 	}
+	public static String getEvalStandardId(String jsonStr){
+		jsonStr = pre(jsonStr);
+		
+		JSONObject responseJson = new JSONObject(jsonStr);
+		
+		String evalStandardId = (String) responseJson.get("eval_standard_id");
+		
+		return evalStandardId;
+	}
 
 }

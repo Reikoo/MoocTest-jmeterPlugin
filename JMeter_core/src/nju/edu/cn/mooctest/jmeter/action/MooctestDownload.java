@@ -141,7 +141,7 @@ public class MooctestDownload implements Command{
 	
 	private void showDownloadResult(final String resultMessage) {
 		JOptionPane.showMessageDialog(null, resultMessage, "下载提示", 
-				JOptionPane.YES_OPTION);
+				JOptionPane.PLAIN_MESSAGE);
 	}
 	
 	private String fetchProjects(final String jsonResponse) {
@@ -213,7 +213,7 @@ public class MooctestDownload implements Command{
 			}
 
 		}
-		resultMessage = "成功下载试题";
+		resultMessage = "成功下载试题至C:/mooctest-jmeter/projects";
 		return resultMessage;
 	}
 	

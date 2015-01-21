@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,6 +31,8 @@ import nju.edu.cn.mooctest.net.plugin.common.ActionMode;
 import nju.edu.cn.mooctest.net.plugin.common.Constants;
 import nju.edu.cn.mooctest.net.plugin.common.ExamType;
 import nju.edu.cn.mooctest.net.plugin.resources.objectsStructure.ProblemObject;
+import nju.edu.cn.mooctest.net.plugin.scriptprocessor.ScriptProcessor;
+import nju.edu.cn.mooctest.net.plugin.scriptprocessor.impl.ScriptProcessorImpl;
 import nju.edu.cn.mooctest.net.plugin.util.http.HttpUtil;
 import nju.edu.cn.mooctest.net.plugin.test.TestUtil;
 import nju.edu.cn.mooctest.net.plugin.common.HttpConfig;
@@ -171,7 +175,7 @@ public class MooctestSubmit implements Command {
 					jsonStr = ValidationUtil.getExamProblemJson(HttpConfig.HOST
 							+ HttpConfig.APP + "getProblemList", stuStr,
 							NetworkUtil.getMACAddress());
-					log.info("Submit ---ProblemList: " + jsonStr);
+					// log.info("Submit ---ProblemList: " + jsonStr);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -207,6 +211,39 @@ public class MooctestSubmit implements Command {
 		Logger log = LoggingManager.getLoggerForClass();
 		JSONObject processDataJson = null; // result json
 
+		// Create problem info from c:/mooctest-jmeter/projects/pro.mt
+		try {
+			File proInfoFile = new File(Constants.DOWNLOAD_PATH + "pro.mt");
+			if (!proInfoFile.exists()) {
+				proInfoFile.createNewFile();
+			}
+			proInfoFile.setWritable(true);
+
+			FileWriter writer = new FileWriter(proInfoFile);
+			
+			System.out.println("Writing pro.mt ...");
+			JSONObject responseJson = new JSONObject(jsonStr);
+			JSONArray problems = (JSONArray) responseJson.get("problems");
+			JSONObject problem = (JSONObject) problems.get(0);
+			System.out.println(problem.get("pro_id"));
+			
+			// Write proIdStr
+			writer.write(problem.get("pro_id") + "\n");
+			// Write proNameStr
+			writer.write(problem.get("pro_name") + "\n");
+			// Write subIdStr
+			writer.write(problem.get("sub_id") + "\n");
+			// Write evalStandardIdStr
+			writer.write(problem.get("eval_standard_id")+"\n");
+			writer.flush();
+			writer.close();
+			System.out.println("Writing is over");
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		HashMap<String, ProblemObject> problemMap = JsonDecoderUtil
 				.getProblems(jsonStr);
 		Set<String> ques = problemMap.keySet();
@@ -234,8 +271,8 @@ public class MooctestSubmit implements Command {
 					if (uploadedJsonString != null) {
 						JOptionPane.showMessageDialog(null, "成功提交考试结果", "提交结果",
 								JOptionPane.PLAIN_MESSAGE);
-					}else{
-						
+					} else {
+
 					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -251,23 +288,27 @@ public class MooctestSubmit implements Command {
 	/**
 	 * Run script and generate result file
 	 */
-	private JSONObject runScript(String scriptURL, ActionMode mode) {
+	private JSONObject runScript(String scriptURL, ActionMode mode)
+			throws Exception {
 		// View TestProjectProcessor.process
 		// Can new a class called ProcessUtil
 		// Must guarantee pro_id, pro_name, sub_id etc. are correct
-		JSONObject processDataJson = new JSONObject();
-		JSONObject scoreJson = new JSONObject();
-		float finalScore = new Float(91.0);
-		String proIdStr = "6";
-		String proNameStr = "Sorting";
-		String subIdStr = "2";
-		String evalStandardIdStr = "3";
-		scoreJson.put("pro_id", proIdStr);
-		scoreJson.put("pro_name", proNameStr);
-		scoreJson.put("sub_id", subIdStr);
-		scoreJson.put("eval_standard_id", evalStandardIdStr);
-		scoreJson.put("score", new Float(finalScore).toString());
-		processDataJson.put("score", scoreJson);
+
+		/*
+		 * JSONObject processDataJson = new JSONObject(); JSONObject scoreJson =
+		 * new JSONObject(); float finalScore = new Float(91.0); String proIdStr
+		 * = "6"; String proNameStr = "Sorting"; String subIdStr = "2"; String
+		 * evalStandardIdStr = "3"; scoreJson.put("pro_id", proIdStr);
+		 * scoreJson.put("pro_name", proNameStr); scoreJson.put("sub_id",
+		 * subIdStr); scoreJson.put("eval_standard_id", evalStandardIdStr);
+		 * scoreJson.put("score", new Float(finalScore).toString());
+		 * processDataJson.put("score", scoreJson);
+		 */
+
+		ScriptProcessor processor = new ScriptProcessorImpl();
+		JSONObject processDataJson = processor.process(scriptURL,
+				ActionMode.SUBMIT);
+
 		return processDataJson;
 	}
 }
