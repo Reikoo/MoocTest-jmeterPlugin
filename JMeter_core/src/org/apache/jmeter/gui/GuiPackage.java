@@ -115,12 +115,11 @@ public final class GuiPackage implements LocaleChangeListener {
      * The LoggerPanel menu item
      */
     private JCheckBoxMenuItem menuItemLoggerPanel;
-
+    
     /**
      * Logger Panel reference
      */
     private LoggerPanel loggerPanel;
-
     
     /**
      * Private constructor to permit instantiation only from within this class.
@@ -755,7 +754,15 @@ public final class GuiPackage implements LocaleChangeListener {
     public JCheckBoxMenuItem getMenuItemLoggerPanel() {
         return menuItemLoggerPanel;
     }
-
+    
+//    public void setMenuItemProblemFilePanel(JCheckBoxMenuItem menuItemProblemFilePanel) {
+//    	this.menuItemProblemFilePanel = menuItemProblemFilePanel;
+//    }
+//
+//    public JCheckBoxMenuItem getMenuItemProblemFilePanel() {
+//    	return menuItemProblemFilePanel;
+//    }
+    
     /**
      * @param loggerPanel LoggerPanel
      */
@@ -769,4 +776,5 @@ public final class GuiPackage implements LocaleChangeListener {
     public LoggerPanel getLoggerPanel() {
         return loggerPanel;
     }
+    
 }

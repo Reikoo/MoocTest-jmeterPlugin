@@ -69,7 +69,7 @@ public class LoggerPanelEnableDisable implements Command {
             if (!guiInstance.getLoggerPanel().isVisible()) {
                 splitPane.setDividerSize(UIManager.getInt("SplitPane.dividerSize"));
                 guiInstance.getLoggerPanel().setVisible(true);
-                splitPane.setDividerLocation(0.8);
+                splitPane.setDividerLocation(0.5);
                 guiInstance.getMenuItemLoggerPanel().getModel().setSelected(true);
             } else {
                 guiInstance.getLoggerPanel().clear();

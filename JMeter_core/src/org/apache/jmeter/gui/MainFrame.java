@@ -121,6 +121,9 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     private static final boolean DISPLAY_LOGGER_PANEL =
             JMeterUtils.getPropDefault("jmeter.loggerpanel.display", false); // $NON-NLS-1$
 
+    private static final boolean DISPLAY_PROBLEMFILE_PANEL = 
+    		JMeterUtils.getPropDefault("jmeter.problemfilepanel.display", false); // $NON-NLS-1$
+    
     // Allow display/hide Log Error/Fatal counter
     private static final boolean DISPLAY_ERROR_FATAL_COUNTER =
             JMeterUtils.getPropDefault("jmeter.errorscounter.display", true); // $NON-NLS-1$
@@ -138,6 +141,8 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
 
     /** The LOG panel. */
     private LoggerPanel logPanel;
+    
+//    private ProblemFilePanel problemFilePanel;
 
     /** The test tree. */
     private JTree tree;
@@ -476,11 +481,11 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
 
         JSplitPane topAndDown = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         topAndDown.setOneTouchExpandable(true);
-        topAndDown.setDividerLocation(0.8);
-        topAndDown.setResizeWeight(.8);
+        topAndDown.setDividerLocation(1);
+        topAndDown.setResizeWeight(1);
         topAndDown.setContinuousLayout(true);
         topAndDown.setBorder(null); // see bug jdk 4131528
-        if (!DISPLAY_LOGGER_PANEL) {
+        if (!DISPLAY_LOGGER_PANEL ) {
             topAndDown.setDividerSize(0);
         }
         mainPanel = createMainPanel();
@@ -498,9 +503,13 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                      });
         }
 
+//        problemFilePanel = createProblemFilePanel();
+//        	JSplitPane scrollPane = new JSplitPane();
+//        	scrollPane.setOneTouchExpandable(true);
+//          scrollPane.setTopComponent(problemFilePanel);
+//          topAndDown.setBottomComponent(scrollPane);//TODO
         topAndDown.setTopComponent(mainPanel);
         topAndDown.setBottomComponent(logPanel);
-
         treeAndMain.setRightComponent(topAndDown);
 
         treeAndMain.setResizeWeight(.2);
@@ -604,6 +613,19 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         loggerPanel.setVisible(DISPLAY_LOGGER_PANEL);
         return loggerPanel;
     }
+    
+    /*
+    private ProblemFilePanel createProblemFilePanel() {
+    	ProblemFilePanel problemFilePanel = new ProblemFilePanel();
+    	problemFilePanel.setMinimumSize(new Dimension(0, 100));
+    	problemFilePanel.setPreferredSize(new Dimension(0, 150));
+        GuiPackage guiInstance = GuiPackage.getInstance();
+        guiInstance.setProblemFilePanel(problemFilePanel);
+        guiInstance.getMenuItemLoggerPanel().getModel().setSelected(DISPLAY_PROBLEMFILE_PANEL);
+        problemFilePanel.setVisible(DISPLAY_PROBLEMFILE_PANEL);
+        return problemFilePanel;
+    }
+    */
 
     /**
      * Create and initialize the GUI representation of the test tree.

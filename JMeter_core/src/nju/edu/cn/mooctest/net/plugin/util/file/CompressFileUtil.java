@@ -18,7 +18,7 @@ import de.innosystec.unrar.rarfile.FileHeader;
 
 public class CompressFileUtil {
 	private static final int BUFFEREDSIZE = 1024;
-
+		
 	/**
 	 * 压缩文件或者文件目录到指定的zip或者rar包
 	 * 
