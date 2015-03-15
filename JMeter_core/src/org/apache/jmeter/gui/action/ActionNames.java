@@ -64,6 +64,7 @@ public final class ActionNames {
     public static final String LAF_PREFIX       = "laf:"; // Look and Feel prefix
     public static final String LOGGER_PANEL_ENABLE_DISABLE     = "logger_panel_enable_disable"; // $NON-NLS-1$
     public static final String MERGE            = "merge"; // $NON-NLS-1$
+    public static final String MOOCTEST_VIEW_PROBLEM = "mooctest_view_problem"; // $NON-NLS-1$
     public static final String MOOCTEST_LOGIN	= "mooctest_login";
     public static final String MOOCTEST_DOWNLOAD= "mooctest_download";
     public static final String MOOCTEST_RUN		= "mooctest_run";

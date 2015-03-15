@@ -69,6 +69,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     private JMenu moocTestJMenu;
     private JMenuItem loginMenuItem;
     private JMenuItem downloadMenuItem;
+    private JMenuItem viewProblemMenuItem;
     private JMenuItem runMenuItem;
     private JMenuItem submitMenuItem;
     //modify over
@@ -361,6 +362,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
         JCheckBoxMenuItem menuToolBar = makeCheckBoxMenuItemRes("menu_toolbar", ActionNames.TOOLBAR); //$NON-NLS-1$
         JCheckBoxMenuItem menuLoggerPanel = makeCheckBoxMenuItemRes("menu_logger_panel", ActionNames.LOGGER_PANEL_ENABLE_DISABLE); //$NON-NLS-1$
+
         GuiPackage guiInstance = GuiPackage.getInstance();
         if (guiInstance != null) { //avoid error in ant task tests (good way?)
             guiInstance.setMenuItemToolbar(menuToolBar);
@@ -551,6 +553,12 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     	downloadMenuItem = makeMenuItemRes("mooctest_download", ActionNames.MOOCTEST_DOWNLOAD);
     	downloadMenuItem.setEnabled(true);
     	
+        viewProblemMenuItem = makeMenuItemRes("mooctest_view_problem", ActionNames.MOOCTEST_VIEW_PROBLEM);
+        viewProblemMenuItem.setEnabled(true);
+//        GuiPackage guiInstance = GuiPackage.getInstance();
+//        if (guiInstance != null) { //avoid error in ant task tests (good way?)
+//            guiInstance.setMenuItemProblemFilePanel(menuProblemFilePanel);
+//        }
     	runMenuItem = makeMenuItemRes("mooctest_run", ActionNames.MOOCTEST_RUN);
     	runMenuItem.setEnabled(true);
     	
@@ -559,6 +567,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     	
     	moocTestJMenu.add(loginMenuItem);
     	moocTestJMenu.add(downloadMenuItem);
+    	moocTestJMenu.add(viewProblemMenuItem);//TODO
     	moocTestJMenu.add(runMenuItem);
     	moocTestJMenu.add(submitMenuItem);
     }
