@@ -15,9 +15,6 @@ import nju.edu.cn.mooctest.net.plugin.common.ActionMode;
 import nju.edu.cn.mooctest.net.plugin.scriptprocessor.ScriptProcessor;
 import nju.edu.cn.mooctest.net.plugin.scriptprocessor.impl.ScriptProcessorImpl;
 
-import org.apache.jmeter.JMeter;
-import org.apache.jmeter.JMeterReport;
-import org.apache.jmeter.engine.JMeterEngine;
 import org.apache.jmeter.engine.JMeterEngineException;
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.engine.TreeCloner;
@@ -26,15 +23,10 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.AbstractAction;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.LoadRecentProject;
-import org.apache.jmeter.gui.tree.JMeterTreeListener;
-import org.apache.jmeter.plugin.JMeterPlugin;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.reporters.Summariser;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jmeter.threads.JMeterThreadMonitor;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
@@ -196,7 +188,7 @@ public class MooctestRun extends AbstractAction {
 		return processDataJson;
 	}
 	
-	//TODO 日后添加到ValidationUtil中
+	//TODO add request api
 	private JSONObject requestTestEvaluation(String url, long proId) {
 		JSONObject testEvaluation = new JSONObject();
 		testEvaluation.put("min_num_threads", 5);

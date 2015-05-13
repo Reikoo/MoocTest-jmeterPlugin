@@ -1,51 +1,33 @@
 package nju.edu.cn.mooctest.jmeter.action;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 import nju.edu.cn.mooctest.net.plugin.common.ActionMode;
+import nju.edu.cn.mooctest.net.plugin.common.AuthToken;
 import nju.edu.cn.mooctest.net.plugin.common.Constants;
-import nju.edu.cn.mooctest.net.plugin.common.ExamType;
+import nju.edu.cn.mooctest.net.plugin.common.HttpConfig;
+import nju.edu.cn.mooctest.net.plugin.common.UserMode;
 import nju.edu.cn.mooctest.net.plugin.resources.objectsStructure.ProblemObject;
 import nju.edu.cn.mooctest.net.plugin.scriptprocessor.ScriptProcessor;
 import nju.edu.cn.mooctest.net.plugin.scriptprocessor.impl.ScriptProcessorImpl;
 import nju.edu.cn.mooctest.net.plugin.util.http.HttpUtil;
-import nju.edu.cn.mooctest.net.plugin.test.TestUtil;
-import nju.edu.cn.mooctest.net.plugin.common.HttpConfig;
 import nju.edu.cn.mooctest.net.plugin.util.http.JsonDecoderUtil;
 import nju.edu.cn.mooctest.net.plugin.util.http.NetworkUtil;
-import nju.edu.cn.mooctest.net.plugin.common.UserMode;
-import nju.edu.cn.mooctest.net.plugin.common.AuthToken;
 import nju.edu.cn.mooctest.net.plugin.util.http.ValidationUtil;
 
-import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.Command;
-import org.apache.jmeter.gui.util.EscapeDialog;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.json.JSONArray;

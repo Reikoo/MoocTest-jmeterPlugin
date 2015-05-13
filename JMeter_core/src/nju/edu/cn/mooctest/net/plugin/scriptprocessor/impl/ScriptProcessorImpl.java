@@ -18,6 +18,9 @@ public class ScriptProcessorImpl implements ScriptProcessor {
 		this.setTestPlanEvaluation(testPlanEvaluation);
 	}
 	
+	public ScriptProcessorImpl() {
+	}
+
 	@Override
 	public JSONObject process(String scriptURL, ActionMode mode)
 			throws Exception {
