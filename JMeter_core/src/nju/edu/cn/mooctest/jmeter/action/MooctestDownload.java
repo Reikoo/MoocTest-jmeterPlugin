@@ -70,7 +70,7 @@ public class MooctestDownload implements Command{
 			// Check if in Exam Mode
 			if (ValidationUtil.isLogin() != null && ValidationUtil.isLogin().getUserMode() == UserMode.ADVENTURE.ordinal()){
 				// Already logged in as Adventure mode
-				JOptionPane.showMessageDialog(null, "ÒÑ¾­µÇÂ¼Í¨¹ØÄ£Ê½£¬ÈôĞèµÇÂ¼¿¼ÊÔÄ£Ê½£¬ÇëÖØÆôJMeter£¡", "µÇÂ¼ÌáÊ¾", 
+				JOptionPane.showMessageDialog(null, "å·²ç»ç™»å½•é€šå…³æ¨¡å¼ï¼Œè‹¥éœ€ç™»å½•è€ƒè¯•æ¨¡å¼ï¼Œè¯·é‡å¯JMeterï¼", "ç™»å½•æç¤º", 
 						JOptionPane.YES_OPTION);
 			}
 			else if ((auth != null) && (auth.getToken().length() > 0) && (auth.getUserMode() == UserMode.EXAM.ordinal())) {
@@ -85,7 +85,7 @@ public class MooctestDownload implements Command{
 
 				// fail to connect to server
 				if (jsonResponse.equals("CONNECTION_FAILED")) {
-					JOptionPane.showMessageDialog(null, "ÍøÂçÁ¬½ÓÊ§°Ü", "ÏÂÔØ´íÎó", 
+					JOptionPane.showMessageDialog(null, "ç½‘ç»œè¿æ¥å¤±è´¥", "ä¸‹è½½é”™è¯¯", 
 							JOptionPane.ERROR_MESSAGE);
 				} else {
 					String examName = JsonDecoderUtil.getExamName(jsonResponse);
@@ -97,11 +97,11 @@ public class MooctestDownload implements Command{
 							.getExamTimeStatus(jsonResponse);
 
 					if (examTimeStatus == 2) {
-						JOptionPane.showMessageDialog(null, "´Ë´Î¿¼ÊÔÒÑ¾­½áÊø£¡", "¿¼ÊÔĞÅÏ¢", 
+						JOptionPane.showMessageDialog(null, "æ­¤æ¬¡è€ƒè¯•å·²ç»ç»“æŸï¼", "è€ƒè¯•ä¿¡æ¯", 
 								JOptionPane.YES_OPTION);
 					} else if (examTimeStatus == 1 && (jsonResponse != null)) {
 						// The exam has started
-						int choice = JOptionPane.showConfirmDialog(null, "±¾´Î¿¼ÊÔÎª"+ examName +"£¬ÊÇ·ñÏÂÔØÊÔÌâ£¿", "¿¼ÊÔĞÅÏ¢",
+						int choice = JOptionPane.showConfirmDialog(null, "æœ¬æ¬¡è€ƒè¯•ä¸º"+ examName +"ï¼Œæ˜¯å¦ä¸‹è½½è¯•é¢˜ï¼Ÿ", "è€ƒè¯•ä¿¡æ¯",
 								JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
 
 						if (choice == JOptionPane.YES_OPTION) {
@@ -111,15 +111,15 @@ public class MooctestDownload implements Command{
 
 					} else {
 						// The exam has not started yet
-						JOptionPane.showMessageDialog(null, "¿¼ÊÔÉĞÎ´¿ªÊ¼£¡ ×î½ü½øĞĞµÄ¿¼ÊÔÊÇ " + examName + " ÓÚ "
-										+ examBeginTime + " ¿ªÊ¼²¢½«ÓÚ"
-										+ examEndTime + "½áÊø£¬ÇëÄÍĞÄµÈ´ı", "¿¼ÊÔĞÅÏ¢", 
+						JOptionPane.showMessageDialog(null, "è€ƒè¯•å°šæœªå¼€å§‹ï¼ æœ€è¿‘è¿›è¡Œçš„è€ƒè¯•æ˜¯ " + examName + " äº "
+								+ examBeginTime + " å¼€å§‹å¹¶å°†äº"
+								+ examEndTime + "ç»“æŸï¼Œè¯·è€å¿ƒç­‰å¾…", "è€ƒè¯•ä¿¡æ¯", 
 										JOptionPane.YES_OPTION);
 					}
 				}
 			} else {
 				// not logged in
-				JOptionPane.showMessageDialog(null, "ÉĞÎ´µÇÂ¼", "µÇÂ¼ÌáÊ¾", 
+				JOptionPane.showMessageDialog(null, "å°šæœªç™»å½•", "ç™»å½•æç¤º", 
 						JOptionPane.YES_OPTION);
 			}
 		} catch (Exception err) {
@@ -127,7 +127,7 @@ public class MooctestDownload implements Command{
 			err.printStackTrace();
 			if ((err.getMessage() == null)
 					|| (err.getMessage().indexOf("Connection refused") >= 0)) {
-				JOptionPane.showMessageDialog(null, "ÍøÂçÒì³£", "ÏÂÔØ´íÎó", 
+				JOptionPane.showMessageDialog(null, "ç½‘ç»œå¼‚å¸¸", "ä¸‹è½½é”™è¯¯", 
 						JOptionPane.ERROR_MESSAGE);
 			} else {
 				//TODO
@@ -148,7 +148,7 @@ public class MooctestDownload implements Command{
 	}
 	
 	private void showDownloadResult(final String resultMessage) {
-		JOptionPane.showMessageDialog(null, resultMessage, "ÏÂÔØÌáÊ¾", 
+		JOptionPane.showMessageDialog(null, resultMessage, "ä¸‹è½½æç¤º", 
 				JOptionPane.PLAIN_MESSAGE);
 	}
 	
@@ -201,7 +201,7 @@ public class MooctestDownload implements Command{
 			} catch (IOException e) {
 				System.err.println("catch IOException!");
 				e.printStackTrace();
-				resultMessage = "ÍøÂç´íÎó»òÏÂÔØÎÄ¼ş²»´æÔÚ";
+				resultMessage = "ç½‘ç»œé”™è¯¯æˆ–ä¸‹è½½æ–‡ä»¶ä¸å­˜åœ¨";
 				return resultMessage;
 			}	
 		}
@@ -221,7 +221,7 @@ public class MooctestDownload implements Command{
 			}
 
 		}
-		resultMessage = "³É¹¦ÏÂÔØÊÔÌâÖÁ" + downloadDest;
+		resultMessage = "æˆåŠŸä¸‹è½½è¯•é¢˜è‡³" + downloadDest;
 		return resultMessage;
 	}
 	

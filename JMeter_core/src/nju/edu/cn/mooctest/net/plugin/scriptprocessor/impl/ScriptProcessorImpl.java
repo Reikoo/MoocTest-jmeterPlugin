@@ -61,7 +61,7 @@ public class ScriptProcessorImpl implements ScriptProcessor {
 		// NOTE: If this method is simple, delete the method and move the method
 		// body to process()
 		float finalScore = new Float(0.0);
-		finalScore = 90;
+		finalScore = 60;
 		return finalScore;
 	}
 
