@@ -382,6 +382,7 @@ public class Summariser extends AbstractTestElement
             }
             total.moveDelta();
             str = format(name, total.total, "=");
+            setErrorPercent(total.total.getErrorPercentageString());
             if (TOLOG) {
                 log.info(str);
             }
@@ -391,4 +392,12 @@ public class Summariser extends AbstractTestElement
         }
     }
 
+    private static double errorPercentage;
+    public double getErrorPercent() {
+    	return errorPercentage;
+    }
+    private void setErrorPercent(String errorPercentageStr) {
+    	errorPercentageStr = errorPercentageStr.replace("%", "");
+    	errorPercentage = Double.valueOf(errorPercentageStr)/100;
+    }
 }
