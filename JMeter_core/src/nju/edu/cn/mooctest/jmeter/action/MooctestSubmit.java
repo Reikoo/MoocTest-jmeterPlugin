@@ -97,57 +97,9 @@ public class MooctestSubmit implements Command {
 	 * over the MainFrame.
 	 */
 	void submit() {
-		/*
-		 * JFrame mainFrame = GuiPackage.getInstance().getMainFrame(); if
-		 * (submit == null) { submit = new EscapeDialog(mainFrame, "Ìá½»½á¹û",
-		 * false); submit.addMouseListener(new MouseAdapter() {
-		 * 
-		 * @Override public void mouseClicked(MouseEvent e) {
-		 * submit.setVisible(false); } });
-		 * 
-		 * Container panel = submit.getContentPane(); panel.setLayout(null);
-		 * panel.setSize(width, height);
-		 * 
-		 * JPanel infoPanel = new JPanel();
-		 * //infoPanel.setBackground(Color.white); infoPanel.setLayout(new
-		 * BorderLayout()); infoPanel.setBounds(width/18, 0, width*16/18,
-		 * height/4); JLabel label = new JLabel("ÊÇ·ñÌá½»¿¼ÊÔ½á¹û£¿");
-		 * label.setHorizontalAlignment(SwingConstants.LEFT);
-		 * infoPanel.add(label, BorderLayout.CENTER);
-		 * 
-		 * JPanel buttonPanel = new JPanel(); buttonPanel.setBounds(0,
-		 * panel.getHeight()/2, panel.getWidth(), panel.getHeight()/3);
-		 * buttonPanel.setLayout(null); JButton okButton = new JButton("OK");
-		 * okButton.setBounds(width*3/7, height/11, width/5, height/6);
-		 * okButton.addActionListener(new ActionListener() {
-		 * 
-		 * @Override public void actionPerformed(ActionEvent e) {
-		 * System.out.println("OK");
-		 * 
-		 * // TODO ÔÚÕâ¶ù½øĞĞÉÏ´«£¬Èç¹û³É¹¦Ôòµ¯³öÌáÊ¾¿ò } }); JButton cancelButton = new
-		 * JButton("Cancel"); cancelButton.setBounds(width*9/13, height/11,
-		 * width/5, height/6); cancelButton.addActionListener(new
-		 * ActionListener() {
-		 * 
-		 * @Override public void actionPerformed(ActionEvent e) {
-		 * submit.setVisible(false); } }); buttonPanel.add(okButton);
-		 * buttonPanel.add(cancelButton);
-		 * 
-		 * panel.add(infoPanel, BorderLayout.NORTH); panel.add(buttonPanel,
-		 * BorderLayout.SOUTH); }
-		 * 
-		 * // NOTE: these lines center the about dialog in the // current
-		 * window. Some older Swing versions have // a bug in
-		 * getLocationOnScreen() and they may not // make this behave properly.
-		 * Point p = mainFrame.getLocationOnScreen(); Dimension d1 =
-		 * mainFrame.getSize(); Dimension d2 = submit.getSize();
-		 * submit.setLocation(p.x + (d1.width - d2.width) / 2, p.y + (d1.height
-		 * - d2.height) / 2); submit.setSize(width, height); //login.pack();;
-		 * submit.setVisible(true);
-		 */
 		Logger log = LoggingManager.getLoggerForClass();
 		log.info("Submit");
-		int choice = JOptionPane.showConfirmDialog(null, "ÊÇ·ñÌá½»¿¼ÊÔ½á¹û£¿", "Ìá½»½á¹û",
+		int choice = JOptionPane.showConfirmDialog(null, "æ˜¯å¦æäº¤è€ƒè¯•ç»“æœï¼Ÿ", "æäº¤ç»“æœ",
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 		if (choice == JOptionPane.YES_OPTION) {
@@ -165,7 +117,7 @@ public class MooctestSubmit implements Command {
 					&& auth.getUserMode() == UserMode.ADVENTURE.ordinal()) {
 				// Already logged in as Adventure mode
 				JOptionPane.showMessageDialog(null,
-						"ÒÑ¾­µÇÂ¼Í¨¹ØÄ£Ê½£¬ÈôĞèµÇÂ¼¿¼ÊÔÄ£Ê½£¬ÇëÖØÆôJMeter£¡", "¾¯¸æ",
+						"å·²ç»ç™»å½•é€šå…³æ¨¡å¼ï¼Œè‹¥éœ€ç™»å½•è€ƒè¯•æ¨¡å¼ï¼Œè¯·é‡å¯JMeterï¼", "è­¦å‘Š",
 						JOptionPane.WARNING_MESSAGE);
 			} else if ((auth != null) && (auth.getToken().length() > 0)
 					&& (auth.getUserMode() == UserMode.EXAM.ordinal())) {
@@ -183,7 +135,7 @@ public class MooctestSubmit implements Command {
 				int examTimeStatus = JsonDecoderUtil.getExamTimeStatus(jsonStr);
 
 				if (examTimeStatus == 2) {
-					JOptionPane.showMessageDialog(null, "´Ë´Î¿¼ÊÔÒÑ¾­½áÊø£¡", "¿¼ÊÔĞÅÏ¢",
+					JOptionPane.showMessageDialog(null, "æ­¤æ¬¡è€ƒè¯•å·²ç»ç»“æŸï¼", "è€ƒè¯•ä¿¡æ¯",
 							JOptionPane.WARNING_MESSAGE);
 				} else {
 					int examType = JsonDecoderUtil.getExamType(jsonStr);
@@ -194,7 +146,7 @@ public class MooctestSubmit implements Command {
 				}
 			} else {
 				// not logging in
-				JOptionPane.showMessageDialog(null, "ÉĞÎ´µÇÂ¼", "¾¯¸æ",
+				JOptionPane.showMessageDialog(null, "å°šæœªç™»å½•", "è­¦å‘Š",
 						JOptionPane.WARNING_MESSAGE);
 			}
 
@@ -250,7 +202,7 @@ public class MooctestSubmit implements Command {
 
 		// upload the file and get the address
 		JFileChooser fileChooser = new JFileChooser();
-		int option = fileChooser.showDialog(null, "Ñ¡ÔñÎÄ¼ş");
+		int option = fileChooser.showDialog(null, "é€‰æ‹©æ–‡ä»¶");
 		if (option == JFileChooser.APPROVE_OPTION) {
 			try {
 				// get script's address
@@ -269,7 +221,7 @@ public class MooctestSubmit implements Command {
 							stuStr, scriptURL + "\\", scriptName,
 							processDataJson.getJSONObject("score").toString());
 					if (uploadedJsonString != null) {
-						JOptionPane.showMessageDialog(null, "³É¹¦Ìá½»¿¼ÊÔ½á¹û", "Ìá½»½á¹û",
+						JOptionPane.showMessageDialog(null, "æˆåŠŸæäº¤è€ƒè¯•ç»“æœ", "æäº¤ç»“æœ",
 								JOptionPane.PLAIN_MESSAGE);
 					} else {
 

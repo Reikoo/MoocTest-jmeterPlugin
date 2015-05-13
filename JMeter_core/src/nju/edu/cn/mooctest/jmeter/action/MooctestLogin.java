@@ -70,52 +70,8 @@ public class MooctestLogin implements Command {
 	 * over the MainFrame.
 	 */
 	void login() {
-		/*
-		 * JFrame mainFrame = GuiPackage.getInstance().getMainFrame(); if (login
-		 * == null) { login = new EscapeDialog(mainFrame, "Éí·İÑéÖ¤", false);
-		 * login.addMouseListener(new MouseAdapter() {
-		 * 
-		 * @Override public void mouseClicked(MouseEvent e) {
-		 * login.setVisible(false); } });
-		 * 
-		 * Container panel = login.getContentPane(); panel.setLayout(null);
-		 * panel.setSize(widthper*5, heightper*8);
-		 * 
-		 * JLabel label1 = new JLabel("ÇëÊäÈëÄúµÄÉí·İÑéÖ¤×Ö´®");
-		 * label1.setBounds(panel.getWidth()*1/5, panel.getHeight()*1/8,
-		 * widthper*2, heightper); JLabel label2 = new JLabel("Éí·İÑéÖ¤: ");
-		 * label2.setBounds(panel.getWidth()*1/5, panel.getHeight()*2/8,
-		 * widthper*2, heightper); JTextField textField = new JTextField();
-		 * textField.setBounds(panel.getWidth()*1/5, panel.getHeight()*3/7,
-		 * widthper*3, 30); JButton okButton = new JButton("OK");
-		 * okButton.setBounds(panel.getWidth()*4/14, panel.getHeight()*5/8,
-		 * widthper*5/6, 30); okButton.addActionListener(new ActionListener() {
-		 * 
-		 * @Override public void actionPerformed(ActionEvent e) { // TODO µ÷ÓÃµÇÂ¼·½·¨
-		 * //Logger log = LoggingManager.getLoggerForClass();
-		 * //log.info("Identify Verification: "+textField.getText());
-		 * login.setVisible(false); } }); JButton cancelButton = new
-		 * JButton("Cancel"); cancelButton.setBounds(panel.getWidth()*8/15,
-		 * panel.getHeight()*5/8, widthper*5/6, 30);
-		 * cancelButton.addActionListener(new ActionListener() {
-		 * 
-		 * @Override public void actionPerformed(ActionEvent e) {
-		 * login.setVisible(false); } });
-		 * 
-		 * panel.add(label1); panel.add(label2); panel.add(textField);
-		 * panel.add(okButton); panel.add(cancelButton); }
-		 * 
-		 * // NOTE: these lines center the about dialog in the // current
-		 * window. Some older Swing versions have // a bug in
-		 * getLocationOnScreen() and they may not // make this behave properly.
-		 * Point p = mainFrame.getLocationOnScreen(); Dimension d1 =
-		 * mainFrame.getSize(); Dimension d2 = login.getSize();
-		 * login.setLocation(p.x + (d1.width - d2.width) / 2, p.y + (d1.height -
-		 * d2.height) / 2); login.setSize(widthper*5, heightper*8);
-		 * //login.pack();; login.setVisible(true);
-		 */
 		String inputID = (String) JOptionPane.showInputDialog(null,
-				"ÇëÊäÈëÄúµÄÉí·İÑéÖ¤×Ö´®£º\n", "Éí·İÑéÖ¤", JOptionPane.PLAIN_MESSAGE, null,
+				"è¯·è¾“å…¥æ‚¨çš„èº«ä»½éªŒè¯å­—ä¸²ï¼š\n", "èº«ä»½éªŒè¯", JOptionPane.PLAIN_MESSAGE, null,
 				null, "");
 
 		if (inputID != null && !inputID.trim().equals("")) {
@@ -128,25 +84,27 @@ public class MooctestLogin implements Command {
 				// Check if in Exam Mode
 				if (ValidationUtil.isLogin() != null
 						&& ValidationUtil.isLogin().getUserMode() == UserMode.ADVENTURE
-								.ordinal()) {
+								.ordinal()
+						&& ValidationUtil.isLogin().getToken().equals(inputID)) {
 					// Already logged in as Adventure mode
 					JOptionPane.showMessageDialog(null,
-							"ÒÑ¾­µÇÂ¼Í¨¹ØÄ£Ê½£¬ÈôĞèµÇÂ¼¿¼ÊÔÄ£Ê½£¬ÇëÖØÆôJMeter£¡", "¾¯¸æ",
+							"å·²ç»ç™»å½•é€šå…³æ¨¡å¼ï¼Œè‹¥éœ€ç™»å½•è€ƒè¯•æ¨¡å¼ï¼Œè¯·é‡å¯JMeterï¼", "è­¦å‘Š",
 							JOptionPane.WARNING_MESSAGE);
 				}
 
 				else if (ValidationUtil.isLogin() != null
 						&& (ValidationUtil.isLogin().getUserMode() == UserMode.EXAM
-								.ordinal())) {
+								.ordinal())
+						&& ValidationUtil.isLogin().getToken().equals(inputID)) {
 					// Already login
-					JOptionPane.showMessageDialog(null, "ÒÑ¾­µÇÂ¼£¬ÎŞĞèÔÙ´ÎµÇÂ¼£¡", "¾¯¸æ",
+					JOptionPane.showMessageDialog(null, "å·²ç»ç™»å½•ï¼Œæ— éœ€å†æ¬¡ç™»å½•ï¼", "è­¦å‘Š",
 							JOptionPane.WARNING_MESSAGE);
 				}
 
 				else {
 					// Validate the student identity string
 					// if success, get the token and save it in workspace
-					
+
 					// get the MAC Address
 					String macAddress = null;
 					macAddress = NetworkUtil.getMACAddress();
@@ -159,7 +117,7 @@ public class MooctestLogin implements Command {
 
 					if (jsonResponse.equals("CONNECTION_FAILED")) {
 						// fail to connect to server
-						JOptionPane.showMessageDialog(null, "ÍøÂçÁ¬½ÓÊ§°Ü", "´íÎó",
+						JOptionPane.showMessageDialog(null, "ç½‘ç»œè¿æ¥å¤±è´¥", "é”™è¯¯",
 								JOptionPane.ERROR_MESSAGE);
 					} else {
 						// parse valid jsonResponse
@@ -179,7 +137,7 @@ public class MooctestLogin implements Command {
 							if (examTimeStatus == 1) {
 								// The exam has started(status == 1)
 								JOptionPane.showMessageDialog(null,
-										"µÇÂ¼³É¹¦£¡ ±¾´Î¿¼ÊÔÎª" + examName, "¿¼ÊÔĞÅÏ¢",
+										"ç™»å½•æˆåŠŸï¼ æœ¬æ¬¡è€ƒè¯•ä¸º" + examName, "è€ƒè¯•ä¿¡æ¯",
 										JOptionPane.PLAIN_MESSAGE);
 								// save the token into root folder of mooctest
 								writeToken(UserMode.EXAM, inputID);
@@ -187,23 +145,23 @@ public class MooctestLogin implements Command {
 							} else if (examTimeStatus == 0) {
 								// have upcoming exam(status == 0)
 								JOptionPane.showMessageDialog(null,
-										"¿¼ÊÔÉĞÎ´¿ªÊ¼£¡ ×î½ü½«Òª¿ªÊ¼µÄ¿¼ÊÔÊÇ " + examName
-												+ " ÓÚ " + examBeginTime
-												+ " ¿ªÊ¼£¬ÓÚ" + examEndTime
-												+ "½áÊø£¬ÇëÄÍĞÄµÈ´ı", "¿¼ÊÔĞÅÏ¢",
+										"è€ƒè¯•å°šæœªå¼€å§‹ï¼ æœ€è¿‘å°†è¦å¼€å§‹çš„è€ƒè¯•æ˜¯ " + examName
+												+ " äº " + examBeginTime
+												+ " å¼€å§‹ï¼Œäº" + examEndTime
+												+ "ç»“æŸï¼Œè¯·è€å¿ƒç­‰å¾…", "è€ƒè¯•ä¿¡æ¯",
 										JOptionPane.WARNING_MESSAGE);
 
 							} else {
 								// don't have upcoming exam(status == 2)
 								JOptionPane.showMessageDialog(null,
-										"ÄúÊäÈëµÄ×Ö´®Ëù¶ÔÓ¦µÄ¿¼ÊÔÒÑ¾­½áÊø£¡", "¿¼ÊÔĞÅÏ¢",
+										"æ‚¨è¾“å…¥çš„å­—ä¸²æ‰€å¯¹åº”çš„è€ƒè¯•å·²ç»ç»“æŸï¼", "è€ƒè¯•ä¿¡æ¯",
 										JOptionPane.WARNING_MESSAGE);
 
 							}
 
 						} else {
 							JOptionPane.showMessageDialog(null,
-									"Éí·İÑéÖ¤×Ö´®´íÎó£¬µÇÂ¼Ê§°Ü£¡", "´íÎó",
+									"èº«ä»½éªŒè¯å­—ä¸²é”™è¯¯ï¼Œç™»å½•å¤±è´¥ï¼", "é”™è¯¯",
 									JOptionPane.ERROR_MESSAGE);
 						}
 					}
@@ -214,7 +172,7 @@ public class MooctestLogin implements Command {
 				log.error("catch Exception: " + e.getClass());
 				if ((e.getMessage() == null)
 						|| (e.getMessage().indexOf("Connection refused") >= 0)) {
-					JOptionPane.showMessageDialog(null, "ÍøÂçÒì³££¡", "´íÎó",
+					JOptionPane.showMessageDialog(null, "ç½‘ç»œå¼‚å¸¸ï¼", "é”™è¯¯",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
