@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import nju.edu.cn.mooctest.net.plugin.common.ActionMode;
@@ -19,15 +18,20 @@ import nju.edu.cn.mooctest.net.plugin.common.Constants;
 import nju.edu.cn.mooctest.net.plugin.common.HttpConfig;
 import nju.edu.cn.mooctest.net.plugin.common.UserMode;
 import nju.edu.cn.mooctest.net.plugin.resources.objectsStructure.ProblemObject;
-import nju.edu.cn.mooctest.net.plugin.scriptprocessor.ScriptProcessor;
-import nju.edu.cn.mooctest.net.plugin.scriptprocessor.impl.ScriptProcessorImpl;
+import nju.edu.cn.mooctest.net.plugin.util.encryption.EncryptionUtil;
+import nju.edu.cn.mooctest.net.plugin.util.file.FileUtil;
+import nju.edu.cn.mooctest.net.plugin.util.http.EvaluationUtil;
 import nju.edu.cn.mooctest.net.plugin.util.http.HttpUtil;
 import nju.edu.cn.mooctest.net.plugin.util.http.JsonDecoderUtil;
 import nju.edu.cn.mooctest.net.plugin.util.http.NetworkUtil;
 import nju.edu.cn.mooctest.net.plugin.util.http.ValidationUtil;
 
+import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.ActionNames;
+import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.Command;
+import org.apache.jmeter.gui.action.LoadRecentProject;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.json.JSONArray;
@@ -41,6 +45,9 @@ import org.json.JSONObject;
 
 public class MooctestSubmit implements Command {
 	private static final Set<String> commandSet;
+	private static final Logger log = LoggingManager.getLoggerForClass();
+
+	public static final String JMX_FILE_EXTENSION = ".jmx";
 
 	private static JDialog submit;
 
@@ -61,7 +68,25 @@ public class MooctestSubmit implements Command {
 	@Override
 	public void doAction(ActionEvent e) {
 		if (e.getActionCommand().equals(ActionNames.MOOCTEST_SUBMIT)) {
+			popupShouldSave(e);
 			this.submit();
+		}
+	}
+
+	/**
+	 * @param e
+	 */
+	protected void popupShouldSave(ActionEvent e) {
+		log.debug("popupShouldSave");
+		if (GuiPackage.getInstance().getTestPlanFile() == null) {
+			if (JOptionPane.showConfirmDialog(GuiPackage.getInstance()
+					.getMainFrame(), JMeterUtils.getResString("should_save"), //$NON-NLS-1$
+					JMeterUtils.getResString("warning"), //$NON-NLS-1$
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+				ActionRouter.getInstance().doActionNow(
+						new ActionEvent(e.getSource(), e.getID(),
+								ActionNames.SAVE));
+			}
 		}
 	}
 
@@ -140,8 +165,7 @@ public class MooctestSubmit implements Command {
 	/**
 	 * Get script's address; run result; submit script and result
 	 */
-	private void submitScript(final String jsonStr, final String stuStr,
-			final int examType) {
+	private void submitScript(final String jsonStr, final String stuStr, final int examType) {
 		Logger log = LoggingManager.getLoggerForClass();
 		JSONObject processDataJson = null; // result json
 
@@ -182,25 +206,29 @@ public class MooctestSubmit implements Command {
 				.getProblems(jsonStr);
 		Set<String> ques = problemMap.keySet();
 
-		// upload the file and get the address
-		JFileChooser fileChooser = new JFileChooser();
-		int option = fileChooser.showDialog(null, "选择文件");
-		if (option == JFileChooser.APPROVE_OPTION) {
+		
 			try {
 				// get script's address
-				String scriptURL = fileChooser.getSelectedFile().toString();
-				String scriptName = fileChooser.getSelectedFile().getName();
+				String scriptURL = LoadRecentProject.getRecentFile(0);
 				log.info("SubmitScript ---file address: " + scriptURL);
 
 				// run script
-				processDataJson = runScript(scriptURL, ActionMode.SUBMIT);
+				processDataJson = EvaluationUtil.runScript(scriptURL, ActionMode.SUBMIT);
 
+				// 2. zip into the folder: results
+				FileUtil.recordExamResult(stuStr, scriptURL, processDataJson);
+							
 				// submit script and result
 				String url = HttpConfig.HOST + HttpConfig.APP + "submit";
 				String uploadedJsonString = null;
+				String number = EncryptionUtil.decryptDES(stuStr);
+				String[] stuStrParts = number.split("_");
+				String resultPath = Constants.DOWNLOAD_PATH + stuStrParts[0] + "/"
+						+ stuStrParts[1] + "/results";
+				String scriptName = "script";
 				try {
 					uploadedJsonString = HttpUtil.submitAnswerWithScore(url,
-							stuStr, scriptURL + "\\", scriptName,
+							stuStr, resultPath + "\\", scriptName,
 							processDataJson.getJSONObject("score").toString());
 					if (uploadedJsonString != null) {
 						JOptionPane.showMessageDialog(null, "成功提交考试结果", "提交结果",
@@ -216,33 +244,7 @@ public class MooctestSubmit implements Command {
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
-		}
+		
 	}
 
-	/**
-	 * Run script and generate result file
-	 */
-	private JSONObject runScript(String scriptURL, ActionMode mode)
-			throws Exception {
-		// View TestProjectProcessor.process
-		// Can new a class called ProcessUtil
-		// Must guarantee pro_id, pro_name, sub_id etc. are correct
-
-		/*
-		 * JSONObject processDataJson = new JSONObject(); JSONObject scoreJson =
-		 * new JSONObject(); float finalScore = new Float(91.0); String proIdStr
-		 * = "6"; String proNameStr = "Sorting"; String subIdStr = "2"; String
-		 * evalStandardIdStr = "3"; scoreJson.put("pro_id", proIdStr);
-		 * scoreJson.put("pro_name", proNameStr); scoreJson.put("sub_id",
-		 * subIdStr); scoreJson.put("eval_standard_id", evalStandardIdStr);
-		 * scoreJson.put("score", new Float(finalScore).toString());
-		 * processDataJson.put("score", scoreJson);
-		 */
-
-		ScriptProcessor processor = new ScriptProcessorImpl();
-		JSONObject processDataJson = processor.process(scriptURL,
-				ActionMode.SUBMIT);
-
-		return processDataJson;
-	}
 }
