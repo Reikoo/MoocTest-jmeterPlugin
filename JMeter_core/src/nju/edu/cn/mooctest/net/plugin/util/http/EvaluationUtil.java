@@ -171,7 +171,7 @@ public class EvaluationUtil {
         try {
         	JSONObject maxErrorJson= getJsonEvaluation().getJSONObject("max_error");
     		double maxError =maxErrorJson.getDouble("max");
-    		if (errorPercentage > maxError) {
+    		if (errorPercentage > maxError || errorPercentage == 0 && tc.finishedThreads == 0) {
     			flag = false;
     		}
 			jsonScore = calculateScore(flag, configExtractor);
