@@ -171,7 +171,7 @@ public class EvaluationUtil {
         try {
         	JSONObject maxErrorJson= getJsonEvaluation().getJSONObject("max_error");
     		double maxError =maxErrorJson.getDouble("max");
-    		if (errorPercentage > maxError || errorPercentage == 0 && tc.finishedThreads == 0) {
+    		if (errorPercentage > maxError || tc.finishedThreads == 0) {
     			flag = false;
     		}
 			jsonScore = calculateScore(flag, configExtractor);
@@ -189,6 +189,16 @@ public class EvaluationUtil {
 		PropertyExtractor propertyExtractor = new PropertyExtractorImpl();
 		jsonEvaluation = getJsonEvaluation();
 		ThreadGroup threadGroup = propertyExtractor.extractThreadGroup(testPlanTree);
+		if (threadGroup == null) {
+			remark.put("num_threads", 0);
+			remark.put("ramp_up", 0);
+			remark.put("loops", 0);
+			remark.put("max_error", 0);
+			remark.put("parameter", 0);
+			remark.put("sync_timer", 0);
+			remark.put("score", 0);
+			return remark;
+		}
 		int numThreads = threadGroup.getNumThreads();
 		double value1 = 0;
 		JSONObject threadNumJson = jsonEvaluation.getJSONObject("num_threads");
@@ -218,8 +228,7 @@ public class EvaluationUtil {
 		remark.put("on_error", value3);
 		*/
 		double value3 = 0;
-		int loops = threadGroup.getNumberOfThreads();
-		System.out.println("loops:"+loops);
+		int loops = configExtractor.getLoopsInt(document);
 		JSONObject loopJson = jsonEvaluation.getJSONObject("loops");
 		if (loops >= loopJson.getInt("min") && 
 				loops <= loopJson.getInt("max")) {
