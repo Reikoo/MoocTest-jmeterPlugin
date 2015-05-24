@@ -51,6 +51,8 @@ public class MooctestRun extends AbstractAction {
     private void runTest() {
     	String path = LoadRecentProject.getRecentFile(0);
 		JSONObject testScore = EvaluationUtil.runScript(new File(path), ActionMode.RUN);
+		//TODO 界面展示分数
+		JTableTest table = new JTableTest(testScore);
 		AuthToken auth = null;
 		try {
 			auth = ValidationUtil.isLogin();
@@ -59,8 +61,6 @@ public class MooctestRun extends AbstractAction {
 		}
 		String stuStr = auth.getToken();
 		FileUtil.recordExamResult(stuStr, path, testScore);
-		//TODO 界面展示分数
-		JTableTest table = new JTableTest(testScore);
     }
     
     class JTableTest extends JFrame {
@@ -72,8 +72,7 @@ public class MooctestRun extends AbstractAction {
          * 初始化窗体组件 
          */  
         private void intiComponent(JSONObject scoreJson) {  
-        	String[] columnNames = {"总分","错误率","线程数","启动时间","循环次数","集结点","参数化"};
-        	
+        	String[] columnNames = {"总分","测试通过率","线程数","启动时间","循环次数","集结点","参数化"};
         	scoreJson = scoreJson.getJSONObject("score");
         	double score = scoreJson.getDouble("score");
         	double numThreadsScore = scoreJson.getDouble("num_threads");
@@ -114,9 +113,11 @@ public class MooctestRun extends AbstractAction {
             JScrollPane scroll = new JScrollPane(table);  
             scroll.setSize(300, 200);  
               
-            add(scroll);  
+            add(scroll); 
+            this.setTitle("此次考试得分如下表所示：");
+            this.setLocationRelativeTo(null);
             this.setVisible(true);  
-            this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
+            this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);  
             this.pack();  
         }
     }
