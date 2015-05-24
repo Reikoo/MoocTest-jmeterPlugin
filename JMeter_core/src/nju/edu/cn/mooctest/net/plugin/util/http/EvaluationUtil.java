@@ -92,7 +92,7 @@ public class EvaluationUtil {
 		scoreJson.put("num_threads", remark.get("num_threads"));
 		scoreJson.put("ramp_up", remark.get("ramp_up"));
 		scoreJson.put("loops", remark.get("loops"));
-		scoreJson.put("sync_time", remark.get("sync_time"));
+		scoreJson.put("sync_timer", remark.get("sync_timer"));
 		scoreJson.put("parameter", remark.get("parameter"));
 		scoreJson.put("max_error", remark.get("max_error"));
 
@@ -219,6 +219,7 @@ public class EvaluationUtil {
 		*/
 		double value3 = 0;
 		int loops = threadGroup.getNumberOfThreads();
+		System.out.println("loops:"+loops);
 		JSONObject loopJson = jsonEvaluation.getJSONObject("loops");
 		if (loops >= loopJson.getInt("min") && 
 				loops <= loopJson.getInt("max")) {
@@ -338,18 +339,19 @@ public class EvaluationUtil {
 					JOptionPane.ERROR_MESSAGE);
 		} else {
 //			testEvaluation = JsonDecoderUtil.getTestEvaluation(jsonResponse);
+			testEvaluation = new JSONObject(jsonResponse);
 		}
-		String line = null;
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(
-					new File("c:/Users/Administrator/Desktop/test.txt")));
-			line = br.readLine();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		testEvaluation = new JSONObject(line);
+//		String line = null;
+//		try {
+//			BufferedReader br = new BufferedReader(new FileReader(
+//					new File("c:/Users/Administrator/Desktop/test.txt")));
+//			line = br.readLine();
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		testEvaluation = new JSONObject(line);
 		return testEvaluation;
 	}
 
