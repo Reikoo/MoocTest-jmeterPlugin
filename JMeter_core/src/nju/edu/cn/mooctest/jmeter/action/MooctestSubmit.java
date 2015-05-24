@@ -146,8 +146,8 @@ public class MooctestSubmit implements Command {
 							JOptionPane.WARNING_MESSAGE);
 				} else {
 					int examType = JsonDecoderUtil.getExamType(jsonStr);
-					log.info("Submit ---examType: " + examType);
-					log.info("Submit ---stuStr: " + stuStr);
+					System.out.println("Submit ---examType: " + examType);
+					System.out.println("Submit ---stuStr: " + stuStr);
 					submitScript(jsonStr, stuStr, examType);
 
 				}

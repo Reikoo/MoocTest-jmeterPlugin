@@ -23,6 +23,7 @@ import nju.edu.cn.mooctest.net.plugin.scriptprocessor.ConfigExtractor.CSVFile;
 import nju.edu.cn.mooctest.net.plugin.scriptprocessor.PropertyExtractor;
 import nju.edu.cn.mooctest.net.plugin.scriptprocessor.PropertyExtractorImpl;
 import nju.edu.cn.mooctest.net.plugin.util.encryption.EncryptionUtil;
+import nju.edu.cn.mooctest.net.plugin.util.file.FileUtil;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jmeter.engine.JMeterEngineException;
@@ -30,6 +31,7 @@ import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.reporters.Summariser;
 import org.apache.jmeter.save.SaveService;
@@ -88,13 +90,13 @@ public class EvaluationUtil {
 		JSONObject remark = runScript(scriptFile);
 		
 		// get the score by a given strategy of calculation
-		scoreJson.put("score", remark.get("score"));
-		scoreJson.put("num_threads", remark.get("num_threads"));
-		scoreJson.put("ramp_up", remark.get("ramp_up"));
-		scoreJson.put("loops", remark.get("loops"));
-		scoreJson.put("sync_timer", remark.get("sync_timer"));
-		scoreJson.put("parameter", remark.get("parameter"));
-		scoreJson.put("max_error", remark.get("max_error"));
+		scoreJson.put("score", remark.get("score").toString());
+		scoreJson.put("num_threads", remark.get("num_threads").toString());
+		scoreJson.put("ramp_up", remark.get("ramp_up").toString());
+		scoreJson.put("loops", remark.get("loops").toString());
+		scoreJson.put("sync_timer", remark.get("sync_timer").toString());
+		scoreJson.put("parameter", remark.get("parameter").toString());
+		scoreJson.put("max_error", remark.get("max_error").toString());
 
 		processDataJson.put("score", scoreJson);
 
@@ -199,6 +201,7 @@ public class EvaluationUtil {
 			remark.put("score", 0);
 			return remark;
 		}
+		
 		int numThreads = threadGroup.getNumThreads();
 		double value1 = 0;
 		JSONObject threadNumJson = jsonEvaluation.getJSONObject("num_threads");
@@ -239,7 +242,12 @@ public class EvaluationUtil {
 		double value4 = 0;
 		JSONObject maxErrorJson= jsonEvaluation.getJSONObject("max_error");
 		if (flag) {
-			value4 = 100*maxErrorJson.getDouble("rate");
+			List<HTTPSamplerProxy> httpSamplers = propertyExtractor.extractSamplers(testPlanTree);
+			if (httpSamplers == null || httpSamplers.isEmpty()) {
+				value4 = 0;
+			} else {
+				value4 = 100*maxErrorJson.getDouble("rate");
+			}
 		}
 		remark.put("max_error", value4);
 		
@@ -377,6 +385,7 @@ public class EvaluationUtil {
 		String downloadDest = Constants.DOWNLOAD_PATH
 				+ stuStrParts[0] + "/" + stuStrParts[1] + "/";
 		File proInfoFile = new File(downloadDest + "pro.mt");
+		FileUtil.createFolder(downloadDest);
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(proInfoFile));
 			String proId = br.readLine();
