@@ -23,6 +23,7 @@ import nju.edu.cn.mooctest.net.plugin.scriptprocessor.ConfigExtractor.CSVFile;
 import nju.edu.cn.mooctest.net.plugin.scriptprocessor.PropertyExtractor;
 import nju.edu.cn.mooctest.net.plugin.scriptprocessor.PropertyExtractorImpl;
 import nju.edu.cn.mooctest.net.plugin.util.encryption.EncryptionUtil;
+import nju.edu.cn.mooctest.net.plugin.util.file.FileUtil;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jmeter.engine.JMeterEngineException;
@@ -88,13 +89,13 @@ public class EvaluationUtil {
 		JSONObject remark = runScript(scriptFile);
 		
 		// get the score by a given strategy of calculation
-		scoreJson.put("score", remark.get("score"));
-		scoreJson.put("num_threads", remark.get("num_threads"));
-		scoreJson.put("ramp_up", remark.get("ramp_up"));
-		scoreJson.put("loops", remark.get("loops"));
-		scoreJson.put("sync_timer", remark.get("sync_timer"));
-		scoreJson.put("parameter", remark.get("parameter"));
-		scoreJson.put("max_error", remark.get("max_error"));
+		scoreJson.put("score", remark.get("score").toString());
+		scoreJson.put("num_threads", remark.get("num_threads").toString());
+		scoreJson.put("ramp_up", remark.get("ramp_up").toString());
+		scoreJson.put("loops", remark.get("loops").toString());
+		scoreJson.put("sync_timer", remark.get("sync_timer").toString());
+		scoreJson.put("parameter", remark.get("parameter").toString());
+		scoreJson.put("max_error", remark.get("max_error").toString());
 
 		processDataJson.put("score", scoreJson);
 
@@ -377,6 +378,7 @@ public class EvaluationUtil {
 		String downloadDest = Constants.DOWNLOAD_PATH
 				+ stuStrParts[0] + "/" + stuStrParts[1] + "/";
 		File proInfoFile = new File(downloadDest + "pro.mt");
+		FileUtil.createFolder(downloadDest);
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(proInfoFile));
 			String proId = br.readLine();
