@@ -21,6 +21,7 @@ import nju.edu.cn.mooctest.net.plugin.resources.objectsStructure.ProblemObject;
 import nju.edu.cn.mooctest.net.plugin.test.TestUtil;
 import nju.edu.cn.mooctest.net.plugin.util.encryption.EncryptionUtil;
 import nju.edu.cn.mooctest.net.plugin.util.file.CompressFileUtil;
+import nju.edu.cn.mooctest.net.plugin.util.file.FileUtil;
 import nju.edu.cn.mooctest.net.plugin.util.http.HttpUtil;
 import nju.edu.cn.mooctest.net.plugin.util.http.JsonDecoderUtil;
 import nju.edu.cn.mooctest.net.plugin.util.http.NetworkUtil;
@@ -166,6 +167,7 @@ public class MooctestDownload implements Command{
 			
 			downloadDest = Constants.DOWNLOAD_PATH
 					+ stuStrParts[0] + "/" + stuStrParts[1] + "/";
+			FileUtil.createFolder(downloadDest);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
