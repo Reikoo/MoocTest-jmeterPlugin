@@ -23,6 +23,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class ConfigExtractor {
+	private static final String LOOP_REGEX = "//stringProp[@name='LoopController.loops']";
+	
 	private static final String FILE_ENCODING = "//CSVDataSet/stringProp[@name='fileEncoding']";
 	
 	private static final String FILE_NAME = "//CSVDataSet/stringProp[@name='filename']";
@@ -66,6 +68,9 @@ public class ConfigExtractor {
 						XPathConstants.NODESET);
 			NodeList groupSize = (NodeList) xpath.evaluate(SYNC_TIMES, document, 
 					XPathConstants.NODESET);
+			if (timeOut == null || groupSize == null || timeOut.getLength()==0 || groupSize.getLength()==0) {
+				return true;
+			}
 			String content = timeOut.item(0).getTextContent();
 			if (Integer.valueOf(content)< 0) {
 				return false;
@@ -89,7 +94,9 @@ public class ConfigExtractor {
 					XPathConstants.NODESET);
 			NodeList variablesList = (NodeList) xpath.evaluate(VARIABLE_NAMES, document, 
 					XPathConstants.NODESET);
-			if (nodeList == null) {
+			if (nodeList == null || fileNameList == null || variablesList == null
+					|| nodeList.getLength() == 0 || fileNameList.getLength()==0 
+					|| variablesList.getLength()==0) {
 				return files;
 			}
 			for (int i=0; i<fileNameList.getLength(); i++) {
@@ -108,18 +115,35 @@ public class ConfigExtractor {
         return files;
 	}
 	
+	public int getLoopsInt(Document document) {
+		XPath xpath = XPathFactory.newInstance().newXPath();
+		Node node = null;
+		try {
+			node = (Node) xpath.evaluate(LOOP_REGEX, document, XPathConstants.NODE);
+		} catch (XPathExpressionException e) {
+			e.printStackTrace();
+		}
+		if (node == null) {
+			return -1;
+		}
+		return Integer.parseInt(node.getTextContent());
+	}
+	
 	public Map<Integer, List<String>> getSyncTimesSibling(Document document) {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		Map<Integer, List<String>> syncTimesMap = new HashMap<Integer, List<String>>();
 		try {
 			NodeList nodeList = (NodeList) xpath.evaluate(SYNC_TIMES, document, 
 					XPathConstants.NODESET);
-			if (nodeList == null) {
+			if (nodeList == null || nodeList.getLength()==0) {
 				return syncTimesMap;
 			}
 			List<String> samplerPath = new ArrayList<String>();
 			NodeList httpSamplers = (NodeList) xpath.evaluate(SAMPLER_PATH, document, 
 					XPathConstants.NODESET);
+			if (httpSamplers == null || httpSamplers.getLength()==0) {
+				return syncTimesMap;
+			}
 			for (int i=0; i<httpSamplers.getLength(); i++) {
 				Node node = httpSamplers.item(i);
 				samplerPath.add(node.getTextContent());
