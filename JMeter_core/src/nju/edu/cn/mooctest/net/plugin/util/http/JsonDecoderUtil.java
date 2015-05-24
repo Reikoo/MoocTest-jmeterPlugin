@@ -169,6 +169,13 @@ public class JsonDecoderUtil {
 		return num;
 	}
 	
+	public static JSONObject getTestEvaluation(String jsonStr) {
+		jsonStr = pre(jsonStr);
+		
+		JSONObject responseJson = new JSONObject(jsonStr);
+		return responseJson.getJSONObject("detail");
+	}
+	
 	public static ArrayList<TableObject> getResults(String jsonStr){
 		jsonStr = pre(jsonStr);
 		ArrayList<TableObject> objects = new ArrayList<TableObject>();

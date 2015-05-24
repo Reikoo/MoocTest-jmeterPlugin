@@ -19,8 +19,7 @@ import nju.edu.cn.mooctest.net.plugin.common.Constants;
 import nju.edu.cn.mooctest.net.plugin.common.HttpConfig;
 import nju.edu.cn.mooctest.net.plugin.common.UserMode;
 import nju.edu.cn.mooctest.net.plugin.resources.objectsStructure.ProblemObject;
-import nju.edu.cn.mooctest.net.plugin.scriptprocessor.ScriptProcessor;
-import nju.edu.cn.mooctest.net.plugin.scriptprocessor.impl.ScriptProcessorImpl;
+import nju.edu.cn.mooctest.net.plugin.util.http.EvaluationUtil;
 import nju.edu.cn.mooctest.net.plugin.util.http.HttpUtil;
 import nju.edu.cn.mooctest.net.plugin.util.http.JsonDecoderUtil;
 import nju.edu.cn.mooctest.net.plugin.util.http.NetworkUtil;
@@ -239,9 +238,7 @@ public class MooctestSubmit implements Command {
 		 * processDataJson.put("score", scoreJson);
 		 */
 
-		ScriptProcessor processor = new ScriptProcessorImpl();
-		JSONObject processDataJson = processor.process(scriptURL,
-				ActionMode.SUBMIT);
+		JSONObject processDataJson = EvaluationUtil.runScript(new File(scriptURL), mode);
 
 		return processDataJson;
 	}

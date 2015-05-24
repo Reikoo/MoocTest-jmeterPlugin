@@ -1,8 +1,9 @@
 package nju.edu.cn.mooctest.jmeter.action;
 
-import java.awt.Frame;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,15 +11,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
 
 import nju.edu.cn.mooctest.net.plugin.common.AuthToken;
 import nju.edu.cn.mooctest.net.plugin.common.Constants;
 import nju.edu.cn.mooctest.net.plugin.common.HttpConfig;
 import nju.edu.cn.mooctest.net.plugin.common.UserMode;
 import nju.edu.cn.mooctest.net.plugin.resources.objectsStructure.ProblemObject;
+import nju.edu.cn.mooctest.net.plugin.test.TestUtil;
 import nju.edu.cn.mooctest.net.plugin.util.encryption.EncryptionUtil;
 import nju.edu.cn.mooctest.net.plugin.util.file.CompressFileUtil;
 import nju.edu.cn.mooctest.net.plugin.util.http.HttpUtil;
@@ -30,10 +30,6 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.Command;
-import org.apache.jmeter.gui.util.EscapeDialog;
-import org.apache.jmeter.swing.HtmlPane;
-import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -45,11 +41,6 @@ import org.apache.log.Logger;
  * modified by I314068 2014/12/29
  */
 public class MooctestDownload implements Command{	
-	private final static int WORKLOAD_LOGIN = 1;
-	private final static int WORKLOAD_FETCH_LIST = 5;
-	private final static int WORKLOAD_DOWNLOAD = 10;
-	private final static int WORKLOAD_UNZIP = 5;
-	private final static int WORKLOAD_IMPORT = 3;
 	private final static String BASE_URL = HttpConfig.HOST + HttpConfig.APP
 			+ "download";
 	
@@ -130,7 +121,9 @@ public class MooctestDownload implements Command{
 				JOptionPane.showMessageDialog(null, "网络异常", "下载错误", 
 						JOptionPane.ERROR_MESSAGE);
 			} else {
-				//TODO
+				log.error(err.getMessage());
+				JOptionPane.showMessageDialog(null, "未知异常", "下载错误", 
+						JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -157,11 +150,6 @@ public class MooctestDownload implements Command{
 		HashMap<String, ProblemObject> problems = new HashMap<String, ProblemObject>();
 		
 		// get download address list from server
-//TODO		int numOfProblem = JsonDecoderUtil
-//				.getNumOfProblems(jsonResponse);
-//		int examType = JsonDecoderUtil.getExamType(jsonResponse);
-//		int workload = calWorkload(numOfProblem);
-
 		problems = JsonDecoderUtil.getProblems(jsonResponse);
 
 		// Step 2: download the problems from server
@@ -184,22 +172,31 @@ public class MooctestDownload implements Command{
 
 		while (nameIte.hasNext()) {
 			String problemName = nameIte.next();
-			// TODO download the problems from server
+			// download the problems from server
 			ProblemObject currentProblem = problems.get(problemName);
 			String problemUrl = currentProblem.getProLoc();
 			try {
-
+				File proInfoFile = new File(downloadDest + "pro.mt");
+				if (proInfoFile.exists()) {
+					proInfoFile.delete();
+					proInfoFile.createNewFile();
+				}
+				BufferedWriter bw = new BufferedWriter(new FileWriter(proInfoFile, true));
+				bw.write(String.valueOf(currentProblem.getProId())+"\n");
+				bw.write(problemName+"\n");
+				bw.write(String.valueOf(currentProblem.getSubId())+"\n");
+				bw.close();
+				
 				System.out.println("Downloading " + BASE_URL
 						+ problemUrl + " to " + downloadDest);
-				// TODO the paths here needs to be rearranged like such
-				// 'downloadDest + "/problems"'
 				String problemPath = HttpUtil.downloadFile(BASE_URL,
 						problemUrl, downloadDest + "/problems");
+				
 				if (problemPath != null) {
 					problemObjects.add(currentProblem);
 				}
 			} catch (IOException e) {
-				System.err.println("catch IOException!");
+				log.error("Download problems error :" + e.getMessage(), e);
 				e.printStackTrace();
 				resultMessage = "网络错误或下载文件不存在";
 				return resultMessage;
@@ -216,6 +213,7 @@ public class MooctestDownload implements Command{
 				try {
 					CompressFileUtil.unzip(problemPath, downloadDest);
 				} catch (IOException e) {
+					log.error("Unzip file error :" + e.getMessage(), e);
 					e.printStackTrace();
 				}
 			}
@@ -225,20 +223,6 @@ public class MooctestDownload implements Command{
 		return resultMessage;
 	}
 	
-	private void sleepFor(Integer waitTime) {
-		try {
-			Thread.sleep(waitTime);
-		} catch (Throwable t) {
-			System.out.println("Wait time interrupted");
-		}
-	}
-	
-	private int calWorkload(int numOfProblem) {
-		return WORKLOAD_LOGIN
-				+ (WORKLOAD_FETCH_LIST + WORKLOAD_DOWNLOAD + WORKLOAD_UNZIP)
-				* numOfProblem + WORKLOAD_IMPORT;
-	}
-
 	private String getFileName(String proLoc) {
 		int pos1 = proLoc.lastIndexOf("\\");
 		int pos2 = proLoc.lastIndexOf("/");

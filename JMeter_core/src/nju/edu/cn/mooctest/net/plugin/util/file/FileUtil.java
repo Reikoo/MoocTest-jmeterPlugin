@@ -1,12 +1,17 @@
 package nju.edu.cn.mooctest.net.plugin.util.file;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
+
+import nju.edu.cn.mooctest.net.plugin.common.Constants;
 
 public class FileUtil {
+
 	/**
 	 * create folder in case the parent directory does not exist
 	 * 
@@ -21,7 +26,6 @@ public class FileUtil {
 			folder.setReadable(true);
 			folder.setExecutable(true);
 			folder.setWritable(true);
-			System.out.println("Can Write? " + folder.canWrite());
 		}
 	}
 
@@ -48,17 +52,14 @@ public class FileUtil {
 				content += c;
 			}
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			if (fr != null) {
 				try {
 					fr.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -74,19 +75,121 @@ public class FileUtil {
 			fw = new FileWriter(file);
 			fw.write(content);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			if (fw != null) {
 				try {
 					fw.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		}
 
+	}
+	
+	public static void appendContentToFile(String path, String content){
+		File file = new File(path);
+		FileWriter fw = null;
+		try {
+			fw = new FileWriter(file, true);
+			fw.write(content);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (fw != null) {
+				try {
+					fw.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public static void copyFile(String src, String des){
+		
+		File srcFile = new File(src);
+		File desFile = new File(des);
+		
+		try {
+			if(desFile.exists())
+				desFile.delete();
+			
+			FileInputStream fis = new FileInputStream(srcFile);
+			Scanner scanner = new Scanner(fis);
+			
+			FileWriter fw = new FileWriter(desFile);
+			while(scanner.hasNext()){
+				String line = scanner.nextLine();
+				fw.write(line+Constants.LINE_SEPARATOR);
+				fw.flush();
+			}
+			scanner.close();
+			fw.close();
+			
+			// set the attribute of desFile the same as srcFile
+			desFile.setLastModified(srcFile.lastModified());
+			desFile.setExecutable(srcFile.canExecute());
+			desFile.setWritable(srcFile.canWrite());
+			desFile.setReadable(srcFile.canRead());
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void cleanDir(String folderPath) {
+		// check if it is a folder
+		File file = new File(folderPath);
+
+		if (file.isDirectory()) {
+			// clean the directory
+			try {
+				// remove files in the folder
+				delAllFile(folderPath);
+				
+				// if want to remove the empty directory
+				// String filePath = folderPath;
+				// filePath = filePath.toString();
+				// java.io.File myFilePath = new java.io.File(filePath);
+				// myFilePath.delete(); 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	// remove all files in a directory
+	public static boolean delAllFile(String path) {
+		boolean flag = false;
+		File file = new File(path);
+		if (!file.exists()) {
+			return flag;
+		}
+		if (!file.isDirectory()) {
+			return flag;
+		}
+		String[] tempList = file.list();
+		File temp = null;
+		for (int i = 0; i < tempList.length; i++) {
+			if (path.endsWith(File.separator)) {
+				temp = new File(path + tempList[i]);
+			} else {
+				temp = new File(path + File.separator + tempList[i]);
+			}
+			if (temp.isFile()) {
+				temp.delete();
+			}
+			if (temp.isDirectory()) {
+				delAllFile(path + "/" + tempList[i]);
+				// delFolder(path + "/" + tempList[i]);
+				flag = true;
+			}
+		}
+		return flag;
 	}
 
 }

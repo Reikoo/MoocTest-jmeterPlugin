@@ -20,12 +20,12 @@ public class CompressFileUtil {
 	private static final int BUFFEREDSIZE = 1024;
 		
 	/**
-	 * Ñ¹ËõÎÄ¼ş»òÕßÎÄ¼şÄ¿Â¼µ½Ö¸¶¨µÄzip»òÕßrar°ü
+	 * å‹ç¼©æ–‡ä»¶æˆ–è€…æ–‡ä»¶ç›®å½•åˆ°æŒ‡å®šçš„zipæˆ–è€…raråŒ…
 	 * 
 	 * @param inputFilename
-	 *            ÒªÑ¹ËõµÄÎÄ¼ş»òÕßÎÄ¼ş¼Ğ£¬Èç¹ûÊÇÎÄ¼ş¼ĞµÄ»°£¬»á½«ÎÄ¼ş¼ĞÏÂµÄËùÓĞÎÄ¼ş°üº¬×ÓÎÄ¼ş¼ĞµÄÄÚÈİ½øĞĞÑ¹Ëõ
+	 *            è¦å‹ç¼©çš„æ–‡ä»¶æˆ–è€…æ–‡ä»¶å¤¹ï¼Œå¦‚æœæ˜¯æ–‡ä»¶å¤¹çš„è¯ï¼Œä¼šå°†æ–‡ä»¶å¤¹ä¸‹çš„æ‰€æœ‰æ–‡ä»¶åŒ…å«å­æ–‡ä»¶å¤¹çš„å†…å®¹è¿›è¡Œå‹ç¼©
 	 * @param zipFilename
-	 *            Éú³ÉµÄzip»òÕßrarÎÄ¼şµÄÃû³Æ
+	 *            ç”Ÿæˆçš„zipæˆ–è€…raræ–‡ä»¶çš„åç§°
 	 */
 	public synchronized static void zip(String inputFilename, String zipFilename)
 			throws IOException {
@@ -33,12 +33,12 @@ public class CompressFileUtil {
 	}
 
 	/**
-	 * Ñ¹ËõÎÄ¼ş»òÕßÎÄ¼şÄ¿Â¼µ½Ö¸¶¨µÄzip»òÕßrar°ü£¬ÄÚ²¿µ÷ÓÃ
+	 * å‹ç¼©æ–‡ä»¶æˆ–è€…æ–‡ä»¶ç›®å½•åˆ°æŒ‡å®šçš„zipæˆ–è€…raråŒ…ï¼Œå†…éƒ¨è°ƒç”¨
 	 * 
 	 * @param inputFile
-	 *            ²ÎÊıÎªÎÄ¼şÀàĞÍµÄÒªÑ¹ËõµÄÎÄ¼ş»òÕßÎÄ¼ş¼Ğ
+	 *            å‚æ•°ä¸ºæ–‡ä»¶ç±»å‹çš„è¦å‹ç¼©çš„æ–‡ä»¶æˆ–è€…æ–‡ä»¶å¤¹
 	 * @param zipFilename
-	 *            Éú³ÉµÄzip»òÕßrarÎÄ¼şµÄÃû³Æ
+	 *            ç”Ÿæˆçš„zipæˆ–è€…raræ–‡ä»¶çš„åç§°
 	 * @return void
 	 */
 	private synchronized static void zip(File inputFile, String zipFilename)
@@ -56,14 +56,14 @@ public class CompressFileUtil {
 	}
 
 	/**
-	 * Ñ¹ËõÎÄ¼ş»òÕßÎÄ¼şÄ¿Â¼µ½Ö¸¶¨µÄzip»òÕßrar°ü
+	 * å‹ç¼©æ–‡ä»¶æˆ–è€…æ–‡ä»¶ç›®å½•åˆ°æŒ‡å®šçš„zipæˆ–è€…raråŒ…
 	 * 
 	 * @param inputFile
-	 *            ²ÎÊıÎªÎÄ¼şÀàĞÍµÄÒªÑ¹ËõµÄÎÄ¼ş»òÕßÎÄ¼ş¼Ğ
+	 *            å‚æ•°ä¸ºæ–‡ä»¶ç±»å‹çš„è¦å‹ç¼©çš„æ–‡ä»¶æˆ–è€…æ–‡ä»¶å¤¹
 	 * @param out
-	 *            Êä³öÁ÷
+	 *            è¾“å‡ºæµ
 	 * @param base
-	 *            »ùÎÄ¼ş¼Ğ
+	 *            åŸºæ–‡ä»¶å¤¹
 	 * @return void
 	 */
 	private synchronized static void zip(File inputFile, ZipOutputStream out,
@@ -99,12 +99,12 @@ public class CompressFileUtil {
 	}
 
 	/**
-	 * ½âÑ¹zip»òÕßrar°üµÄÄÚÈİµ½Ö¸¶¨µÄÄ¿Â¼ÏÂ£¬¿ÉÒÔ´¦ÀíÆäÎÄ¼ş¼ĞÏÂ°üº¬×ÓÎÄ¼ş¼ĞµÄÇé¿ö
+	 * è§£å‹zipæˆ–è€…raråŒ…çš„å†…å®¹åˆ°æŒ‡å®šçš„ç›®å½•ä¸‹ï¼Œå¯ä»¥å¤„ç†å…¶æ–‡ä»¶å¤¹ä¸‹åŒ…å«å­æ–‡ä»¶å¤¹çš„æƒ…å†µ
 	 * 
 	 * @param zipFilename
-	 *            Òª½âÑ¹µÄzip»òÕßrar°üÎÄ¼ş
+	 *            è¦è§£å‹çš„zipæˆ–è€…raråŒ…æ–‡ä»¶
 	 * @param outputDirectory
-	 *            ½âÑ¹ºó´æ·ÅµÄÄ¿Â¼
+	 *            è§£å‹åå­˜æ”¾çš„ç›®å½•
 	 */
 	public synchronized static void unzip(String zipFilename,
 			String outputDirectory) throws IOException {
@@ -133,7 +133,7 @@ public class CompressFileUtil {
 
 				// the codes remedified by can_do on 2010-07-02 =begin=
 				// /////begin/////
-				// ÅĞ¶ÏÎÄ¼ş²»´æÔÚµÄ»°£¬¾Í´´½¨¸ÃÎÄ¼şËùÔÚÎÄ¼ş¼ĞµÄÄ¿Â¼
+				// åˆ¤æ–­æ–‡ä»¶ä¸å­˜åœ¨çš„è¯ï¼Œå°±åˆ›å»ºè¯¥æ–‡ä»¶æ‰€åœ¨æ–‡ä»¶å¤¹çš„ç›®å½•
 				if (!f.exists()) {
 					String[] arrFolderName = zipEntry.getName().split("/");
 					String strRealFolder = "";
@@ -143,7 +143,7 @@ public class CompressFileUtil {
 					strRealFolder = outFile.getPath() + File.separator
 							+ strRealFolder;
 					File tempDir = new File(strRealFolder);
-					// ´Ë´¦Ê¹ÓÃ.mkdirs()·½·¨£¬¶ø²»ÄÜÓÃ.mkdir()
+					// æ­¤å¤„ä½¿ç”¨.mkdirs()æ–¹æ³•ï¼Œè€Œä¸èƒ½ç”¨.mkdir()
 					tempDir.mkdirs();
 				}
 				// /////end///
@@ -169,12 +169,12 @@ public class CompressFileUtil {
 	}
 
 	/**
-	 * ½âÑ¹rar¸ñÊ½µÄÑ¹ËõÎÄ¼şµ½Ö¸¶¨Ä¿Â¼ÏÂ
+	 * è§£å‹raræ ¼å¼çš„å‹ç¼©æ–‡ä»¶åˆ°æŒ‡å®šç›®å½•ä¸‹
 	 * 
 	 * @param rarFileName
-	 *            Ñ¹ËõÎÄ¼ş
+	 *            å‹ç¼©æ–‡ä»¶
 	 * @param extPlace
-	 *            ½âÑ¹Ä¿Â¼
+	 *            è§£å‹ç›®å½•
 	 * @throws Exception
 	 */
 	public static boolean unrar(String rarFileName, String extPlace) {

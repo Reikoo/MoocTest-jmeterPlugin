@@ -161,6 +161,72 @@ public class ValidationUtil {
 
 		return jsonResponse;
 	}
+	
+	public static String getExamEvaluationJson(String url, String proIdStr) {
+		String jsonResponse = null;
+		
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		
+		URI uri = null;
+		try {
+			uri = new URIBuilder().setPath(url).setParameter("proIdStr", proIdStr).build();
+		} catch (URISyntaxException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			HttpPost httppost = new HttpPost(uri);
+
+			System.out
+					.println("executing request " + httppost.getRequestLine());
+			CloseableHttpResponse response = httpClient.execute(httppost);
+			try {
+
+				int statusCode = response.getStatusLine().getStatusCode();
+				if (statusCode != HttpStatus.SC_OK) {
+					System.err.println("Error Response!");
+					System.err
+							.println("----------------------------------------");
+					System.err.println(response.getStatusLine());
+					jsonResponse = "CONNECTION_FAILED";
+				} else {
+					HttpEntity entity = response.getEntity();
+					StringBuilder entityStringBuilder = new StringBuilder();
+					if (entity != null) {
+						try {
+							BufferedReader bufferedReader = new BufferedReader(
+									new InputStreamReader(entity.getContent(),
+											"UTF-8"), 8 * 1024);
+							String line = null;
+							while ((line = bufferedReader.readLine()) != null) {
+								entityStringBuilder.append(line + "/n");
+							}
+							// resultJsonObject=new
+							// JSONObject(entityStringBuilder.toString());
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+
+					jsonResponse = entityStringBuilder.toString();
+					System.out.println("The response returns " + jsonResponse);
+				}
+			} finally {
+				response.close();
+			}
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				httpClient.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return jsonResponse;
+	}
 
 	public static AuthToken isLogin() throws Exception {
 		// use auth.mt in MOOCTEST_ROOTPATH to judge whether one is Logged onto

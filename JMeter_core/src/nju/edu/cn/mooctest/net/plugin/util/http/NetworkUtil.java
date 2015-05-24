@@ -8,34 +8,34 @@ import java.net.NetworkInterface;
 
 public class NetworkUtil {
 	/**
-	 * »ñÈ¡µ±Ç°²Ù×÷ÏµÍ³Ãû³Æ. return ²Ù×÷ÏµÍ³Ãû³Æ ÀıÈç:windows xp,linux µÈ.
+	 * è·å–å½“å‰æ“ä½œç³»ç»Ÿåç§°. return æ“ä½œç³»ç»Ÿåç§° ä¾‹å¦‚:windows xp,linux ç­‰.
 	 */
 	public static String getOSName() {
 		return System.getProperty("os.name").toLowerCase();
 	}
 
 	/**
-	 * »ñÈ¡unixÍø¿¨µÄmacµØÖ·. ·ÇwindowsµÄÏµÍ³Ä¬ÈÏµ÷ÓÃ±¾·½·¨»ñÈ¡. Èç¹ûÓĞÌØÊâÏµÍ³Çë¼ÌĞøÀ©³äĞÂµÄÈ¡macµØÖ··½·¨.
+	 * è·å–unixç½‘å¡çš„macåœ°å€. éwindowsçš„ç³»ç»Ÿé»˜è®¤è°ƒç”¨æœ¬æ–¹æ³•è·å–. å¦‚æœæœ‰ç‰¹æ®Šç³»ç»Ÿè¯·ç»§ç»­æ‰©å……æ–°çš„å–macåœ°å€æ–¹æ³•.
 	 * 
-	 * @return macµØÖ·
+	 * @return macåœ°å€
 	 */
 	private static String getUnixMACAddress() {
 		String mac = null;
 		BufferedReader bufferedReader = null;
 		Process process = null;
 		try {
-			// linuxÏÂµÄÃüÁî£¬Ò»°ãÈ¡eth0×÷Îª±¾µØÖ÷Íø¿¨
+			// linuxä¸‹çš„å‘½ä»¤ï¼Œä¸€èˆ¬å–eth0ä½œä¸ºæœ¬åœ°ä¸»ç½‘å¡
 			process = Runtime.getRuntime().exec("ifconfig eth0");
-			// ÏÔÊ¾ĞÅÏ¢ÖĞ°üº¬ÓĞmacµØÖ·ĞÅÏ¢
+			// æ˜¾ç¤ºä¿¡æ¯ä¸­åŒ…å«æœ‰macåœ°å€ä¿¡æ¯
 			bufferedReader = new BufferedReader(new InputStreamReader(
 					process.getInputStream()));
 			String line = null;
 			int index = -1;
 			while ((line = bufferedReader.readLine()) != null) {
-				// Ñ°ÕÒ±êÊ¾×Ö·û´®[hwaddr]
+				// å¯»æ‰¾æ ‡ç¤ºå­—ç¬¦ä¸²[hwaddr]
 				index = line.toLowerCase().indexOf("hwaddr");
-				if (index >= 0) {// ÕÒµ½ÁË
-					// È¡³ömacµØÖ·²¢È¥³ı2±ß¿Õ¸ñ
+				if (index >= 0) {// æ‰¾åˆ°äº†
+					// å–å‡ºmacåœ°å€å¹¶å»é™¤2è¾¹ç©ºæ ¼
 					mac = line.substring(index + "hwaddr".length() + 1).trim();
 					break;
 				}
@@ -57,16 +57,16 @@ public class NetworkUtil {
 	}
 
 	/**
-	 * »ñÈ¡widnowsÍø¿¨µÄmacµØÖ·.
+	 * è·å–widnowsç½‘å¡çš„macåœ°å€.
 	 * 
-	 * @return macµØÖ·
+	 * @return macåœ°å€
 	 */
 	private static String getWindowsMACAddress() {
 		String mac = null;
 		BufferedReader bufferedReader = null;
 		Process process = null;
 		try {
-			// windowsÏÂµÄÃüÁî£¬ÏÔÊ¾ĞÅÏ¢ÖĞ°üº¬ÓĞmacµØÖ·ĞÅÏ¢
+			// windowsä¸‹çš„å‘½ä»¤ï¼Œæ˜¾ç¤ºä¿¡æ¯ä¸­åŒ…å«æœ‰macåœ°å€ä¿¡æ¯
 			process = Runtime.getRuntime().exec("ipconfig /all");
 			bufferedReader = new BufferedReader(new InputStreamReader(
 					process.getInputStream()));
@@ -74,14 +74,14 @@ public class NetworkUtil {
 			int index = -1;
 			while ((line = bufferedReader.readLine()) != null) {
 				System.out.println(line);
-				// Ñ°ÕÒ±êÊ¾×Ö·û´®[physical
+				// å¯»æ‰¾æ ‡ç¤ºå­—ç¬¦ä¸²[physical
 				index = line.toLowerCase().indexOf("physical address");
 
-				if (index >= 0) {// ÕÒµ½ÁË
-					index = line.indexOf(":");// Ñ°ÕÒ":"µÄÎ»ÖÃ
+				if (index >= 0) {// æ‰¾åˆ°äº†
+					index = line.indexOf(":");// å¯»æ‰¾":"çš„ä½ç½®
 					if (index >= 0) {
 						System.out.println(mac);
-						// È¡³ömacµØÖ·²¢È¥³ı2±ß¿Õ¸ñ
+						// å–å‡ºmacåœ°å€å¹¶å»é™¤2è¾¹ç©ºæ ¼
 						mac = line.substring(index + 1).trim();
 					}
 					break;
@@ -105,38 +105,38 @@ public class NetworkUtil {
 	}
 
 	/**
-	 * windows 7 ×¨ÓÃ »ñÈ¡MACµØÖ·
+	 * windows 7 ä¸“ç”¨ è·å–MACåœ°å€
 	 * 
 	 * @return
 	 * @throws Exception
 	 */
 	private static String getWin7MACAddress() throws Exception {
 
-		// »ñÈ¡±¾µØIP¶ÔÏó
+		// è·å–æœ¬åœ°IPå¯¹è±¡
 		InetAddress ia = InetAddress.getLocalHost();
-		// »ñµÃÍøÂç½Ó¿Ú¶ÔÏó£¨¼´Íø¿¨£©£¬²¢µÃµ½macµØÖ·£¬macµØÖ·´æÔÚÓÚÒ»¸öbyteÊı×éÖĞ¡£
+		// è·å¾—ç½‘ç»œæ¥å£å¯¹è±¡ï¼ˆå³ç½‘å¡ï¼‰ï¼Œå¹¶å¾—åˆ°macåœ°å€ï¼Œmacåœ°å€å­˜åœ¨äºä¸€ä¸ªbyteæ•°ç»„ä¸­ã€‚
 		byte[] mac = NetworkInterface.getByInetAddress(ia).getHardwareAddress();
 
-		// ÏÂÃæ´úÂëÊÇ°ÑmacµØÖ·Æ´×°³ÉString
+		// ä¸‹é¢ä»£ç æ˜¯æŠŠmacåœ°å€æ‹¼è£…æˆString
 		StringBuffer sb = new StringBuffer();
 
 		for (int i = 0; i < mac.length; i++) {
 			if (i != 0) {
 				sb.append("-");
 			}
-			// mac[i] & 0xFF ÊÇÎªÁË°Ñbyte×ª»¯ÎªÕıÕûÊı
+			// mac[i] & 0xFF æ˜¯ä¸ºäº†æŠŠbyteè½¬åŒ–ä¸ºæ­£æ•´æ•°
 			String s = Integer.toHexString(mac[i] & 0xFF);
 			sb.append(s.length() == 1 ? 0 + s : s);
 		}
 
-		// °Ñ×Ö·û´®ËùÓĞĞ¡Ğ´×ÖÄ¸¸ÄÎª´óĞ´³ÉÎªÕı¹æµÄmacµØÖ·²¢·µ»Ø
+		// æŠŠå­—ç¬¦ä¸²æ‰€æœ‰å°å†™å­—æ¯æ”¹ä¸ºå¤§å†™æˆä¸ºæ­£è§„çš„macåœ°å€å¹¶è¿”å›
 		return sb.toString().toUpperCase();
 	}
 
 	/**
-	 * »ñÈ¡MACÍø¿¨µÄmacµØÖ·.
+	 * è·å–MACç½‘å¡çš„macåœ°å€.
 	 * 
-	 * @return macµØÖ·
+	 * @return macåœ°å€
 	 */
 	public static String getMacOSMACAddress() {
 		String mac = null;
@@ -144,7 +144,7 @@ public class NetworkUtil {
 		Process process = null;
 		try {
 			/**
-			 * UnixÏÂµÄÃüÁî£¬Ò»°ãÈ¡eth0×÷Îª±¾µØÖ÷Íø¿¨ ÏÔÊ¾ĞÅÏ¢ÖĞ°üº¬ÓĞmacµØÖ·ĞÅÏ¢
+			 * Unixä¸‹çš„å‘½ä»¤ï¼Œä¸€èˆ¬å–eth0ä½œä¸ºæœ¬åœ°ä¸»ç½‘å¡ æ˜¾ç¤ºä¿¡æ¯ä¸­åŒ…å«æœ‰macåœ°å€ä¿¡æ¯
 			 */
 			process = Runtime.getRuntime().exec("ifconfig");
 			bufferedReader = new BufferedReader(new InputStreamReader(
@@ -153,15 +153,15 @@ public class NetworkUtil {
 			int index = -1;
 			while ((line = bufferedReader.readLine()) != null) {
 				/**
-				 * Ñ°ÕÒ±êÊ¾×Ö·û´®[ether]
+				 * å¯»æ‰¾æ ‡ç¤ºå­—ç¬¦ä¸²[ether]
 				 */
 				index = line.toLowerCase().indexOf("ether");
 				/**
-				 * ÕÒµ½ÁË
+				 * æ‰¾åˆ°äº†
 				 */
 				if (index != -1) {
 					/**
-					 * È¡³ömacµØÖ·²¢È¥³ı2±ß¿Õ¸ñ
+					 * å–å‡ºmacåœ°å€å¹¶å»é™¤2è¾¹ç©ºæ ¼
 					 */
 					mac = line.substring(index + "ether".length() + 1).trim();
 					break;
@@ -186,10 +186,10 @@ public class NetworkUtil {
 	}
 
 	/**
-	 * ²âÊÔÓÃµÄmain·½·¨.
+	 * æµ‹è¯•ç”¨çš„mainæ–¹æ³•.
 	 * 
 	 * @param argc
-	 *            ÔËĞĞ²ÎÊı.
+	 *            è¿è¡Œå‚æ•°.
 	 * @throws Exception
 	 */
 	public static String getMACAddress() throws Exception {
@@ -199,11 +199,11 @@ public class NetworkUtil {
 			String mac = getWin7MACAddress();
 			return mac;
 		} else if (os.startsWith("windows")) {
-			// ±¾µØÊÇwindows
+			// æœ¬åœ°æ˜¯windows
 			String mac = getWindowsMACAddress();
 			return mac;
 		} else if (os.startsWith("mac")) {
-			// ±¾µØÊÇ·ÇwindowsÏµÍ³ Ò»°ã¾ÍÊÇunix
+			// æœ¬åœ°æ˜¯éwindowsç³»ç»Ÿ ä¸€èˆ¬å°±æ˜¯unix
 			String mac = getMacOSMACAddress();
 			return mac;
 		} else {

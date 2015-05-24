@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lib/ApacheJMeter_components.jar"/>
+	<classpathentry kind="lib" path="lib/ApacheJMeter_components.jar" sourcepath="E:/apache-jmeter-2.12/apache-jmeter-2.12/lib/ext/ApacheJMeter_components.jar"/>
 	<classpathentry kind="lib" path="lib/ApacheJMeter_ftp.jar"/>
 	<classpathentry kind="lib" path="lib/ApacheJMeter_functions.jar"/>
 	<classpathentry kind="lib" path="lib/ApacheJMeter_http.jar"/>

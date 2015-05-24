@@ -392,7 +392,7 @@ public class Summariser extends AbstractTestElement
         }
     }
 
-    private static double errorPercentage;
+    private double errorPercentage;
     public double getErrorPercent() {
     	return errorPercentage;
     }
