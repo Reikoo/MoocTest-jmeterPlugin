@@ -213,7 +213,7 @@ public class MooctestSubmit implements Command {
 				log.info("SubmitScript ---file address: " + scriptURL);
 
 				// run script
-				processDataJson = EvaluationUtil.runScript(scriptURL, ActionMode.SUBMIT);
+				processDataJson = EvaluationUtil.runScript(new File(scriptURL), ActionMode.SUBMIT);
 
 				// 2. zip into the folder: results
 				FileUtil.recordExamResult(stuStr, scriptURL, processDataJson);

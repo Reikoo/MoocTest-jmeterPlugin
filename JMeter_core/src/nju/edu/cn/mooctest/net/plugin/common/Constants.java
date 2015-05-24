@@ -1,5 +1,6 @@
 package nju.edu.cn.mooctest.net.plugin.common;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,16 +33,21 @@ public class Constants {
 
 	private static String getMooctestRootPath() {
 		String osName = System.getProperty("os.name");
-
-		if (osName.indexOf("Windows") >= 0) {
+		
+		if (osName.indexOf("Windows") >= 0){
 			return ALTER_ROOT_PATHS.get("Windows");
-		} else if (osName.indexOf("Mac") >= 0) {
-			return ALTER_ROOT_PATHS.get("Unix-like");
-		} else if (osName.indexOf("Linux") >= 0) {
+		}
+		else if (osName.indexOf("Mac") >= 0){
 			return ALTER_ROOT_PATHS.get("Unix-like");
 		}
-
+		else if (osName.indexOf("Linux") >= 0){
+			return ALTER_ROOT_PATHS.get("Unix-like");
+		}
+		
 		// return as Windows like in default
 		return ALTER_ROOT_PATHS.get("Windows");
 	}
+
+	public static final String LINE_SEPARATOR= System.getProperty("line.separator");
+	public static final String SEPARATOR = File.separator; // "\\";
 }

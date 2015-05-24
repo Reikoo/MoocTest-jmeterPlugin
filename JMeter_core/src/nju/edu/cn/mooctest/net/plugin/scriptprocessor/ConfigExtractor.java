@@ -30,7 +30,7 @@ public class ConfigExtractor {
 	private static final String VARIABLE_NAMES = "//CSVDataSet/stringProp[@name='variableNames']";
 	
 	private static final String SYNC_TIMES = "//SyncTimer/intProp[@name='groupSize']";
-	private static final String SYNC_TIME_OUT = "//SyncTimer/intProp[@name='timeoutInMs']";
+	private static final String SYNC_TIME_OUT = "//SyncTimer/longProp[@name='timeoutInMs']";
 	
 	private static final String SAMPLER_PATH = "//HTTPSamplerProxy/stringProp[@name='HTTPSampler.path']";
 	
