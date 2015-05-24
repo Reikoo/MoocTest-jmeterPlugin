@@ -7,7 +7,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import nju.edu.cn.mooctest.net.plugin.common.ActionMode;
+import nju.edu.cn.mooctest.net.plugin.common.AuthToken;
+import nju.edu.cn.mooctest.net.plugin.util.file.FileUtil;
 import nju.edu.cn.mooctest.net.plugin.util.http.EvaluationUtil;
+import nju.edu.cn.mooctest.net.plugin.util.http.ValidationUtil;
 
 import org.apache.jmeter.gui.action.AbstractAction;
 import org.apache.jmeter.gui.action.ActionNames;
@@ -43,6 +46,14 @@ public class MooctestRun extends AbstractAction {
     private void runTest() {
     	String path = LoadRecentProject.getRecentFile(0);
 		JSONObject testScore = EvaluationUtil.runScript(new File(path), ActionMode.RUN);
+		AuthToken auth = null;
+		try {
+			auth = ValidationUtil.isLogin();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		String stuStr = auth.getToken();
+		FileUtil.recordExamResult(stuStr, path, testScore);
 		//TODO 界面展示分数
     }
 }
