@@ -49,17 +49,21 @@ public class MooctestRun extends AbstractAction {
 	}
 
     private void runTest() {
-    	String path = LoadRecentProject.getRecentFile(0);
-		JSONObject testScore = EvaluationUtil.runScript(new File(path), ActionMode.RUN);
-		//TODO 界面展示分数
-		JTableTest table = new JTableTest(testScore);
-		AuthToken auth = null;
+    	//String path = LoadRecentProject.getRecentFile(0);
+    	AuthToken auth = null;
 		try {
 			auth = ValidationUtil.isLogin();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		String stuStr = auth.getToken();
+    	String path = EvaluationUtil.SaveScript(stuStr);
+    	
+    	
+		JSONObject testScore = EvaluationUtil.runScript(new File(path), ActionMode.RUN);
+		//TODO 界面展示分数
+		JTableTest table = new JTableTest(testScore);
+		
 		FileUtil.recordExamResult(stuStr, path, testScore);
     }
     
@@ -72,7 +76,7 @@ public class MooctestRun extends AbstractAction {
          * 初始化窗体组件 
          */  
         private void intiComponent(JSONObject scoreJson) {  
-        	String[] columnNames = {"总分","测试通过率","线程数","启动时间","循环次数","集结点","参数化"};
+        	String[] columnNames = {"总分","Http请求","线程数","启动时间","循环次数","集结点","参数化"};
         	scoreJson = scoreJson.getJSONObject("score");
         	double score = scoreJson.getDouble("score");
         	double numThreadsScore = scoreJson.getDouble("num_threads");
