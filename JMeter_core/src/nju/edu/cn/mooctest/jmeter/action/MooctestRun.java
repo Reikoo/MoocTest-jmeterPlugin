@@ -7,19 +7,23 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 
 import nju.edu.cn.mooctest.net.plugin.common.ActionMode;
 import nju.edu.cn.mooctest.net.plugin.common.AuthToken;
+import nju.edu.cn.mooctest.net.plugin.scriptprocessor.ScriptFileUtil;
 import nju.edu.cn.mooctest.net.plugin.util.file.FileUtil;
 import nju.edu.cn.mooctest.net.plugin.util.http.EvaluationUtil;
 import nju.edu.cn.mooctest.net.plugin.util.http.ValidationUtil;
 
+import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.AbstractAction;
 import org.apache.jmeter.gui.action.ActionNames;
-import org.apache.jmeter.gui.action.LoadRecentProject;
+import org.apache.jmeter.gui.action.ActionRouter;
+import org.apache.jmeter.util.JMeterUtils;
 import org.json.JSONObject;
 
 public class MooctestRun extends AbstractAction {
@@ -35,8 +39,18 @@ public class MooctestRun extends AbstractAction {
 	@Override
 	public void doAction(ActionEvent e) {
 		if (e.getActionCommand().equals(ActionNames.MOOCTEST_RUN)) {
-			popupShouldSave(e);
-			runTest();
+			if (GuiPackage.getInstance().getTestPlanFile() == null) {
+	            if (JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
+	                    JMeterUtils.getResString("should_save"),  //$NON-NLS-1$
+	                    JMeterUtils.getResString("warning"),  //$NON-NLS-1$
+	                    JOptionPane.YES_NO_OPTION,
+	                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+	                ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(),ActionNames.SAVE));
+	                runTest();
+	            }
+	        } else {
+	        	runTest();
+	        }
 		}
 	}
 
@@ -49,7 +63,6 @@ public class MooctestRun extends AbstractAction {
 	}
 
     private void runTest() {
-    	//String path = LoadRecentProject.getRecentFile(0);
     	AuthToken auth = null;
 		try {
 			auth = ValidationUtil.isLogin();
@@ -57,11 +70,9 @@ public class MooctestRun extends AbstractAction {
 			e.printStackTrace();
 		}
 		String stuStr = auth.getToken();
-    	String path = EvaluationUtil.SaveScript(stuStr);
-    	
+    	String path = ScriptFileUtil.SaveScript(stuStr);
     	
 		JSONObject testScore = EvaluationUtil.runScript(new File(path), ActionMode.RUN);
-		//TODO 界面展示分数
 		JTableTest table = new JTableTest(testScore);
 		
 		FileUtil.recordExamResult(stuStr, path, testScore);

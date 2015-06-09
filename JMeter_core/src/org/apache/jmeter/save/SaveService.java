@@ -211,7 +211,7 @@ public class SaveService {
         try {
             fis = new FileInputStream(JMeterUtils.getJMeterHome()
                          + JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES, SAVESERVICE_PROPERTIES_FILE));
-//        	fis = new FileInputStream("E:/apache-jmeter-2.12/apache-jmeter-2.12/bin/saveservice.properties");
+//        	fis = new FileInputStream("E:/apache-jmeter-2.12/bin/saveservice.properties");
         	nameMap.load(fis);
         } finally {
             JOrphanUtils.closeQuietly(fis);

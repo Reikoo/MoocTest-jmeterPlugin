@@ -2,6 +2,7 @@ package nju.edu.cn.mooctest.net.plugin.scriptprocessor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -29,21 +30,14 @@ public class PropertyExtractorImpl implements PropertyExtractor{
 
 	@Override
 	public List<HTTPSamplerProxy> extractSamplers(HashTree testPlanTree) {
-		SearchByClass<Sampler> testSampler = new SearchByClass<Sampler>(Sampler.class);
-        testPlanTree.traverse(testSampler);
-        Object[] plan = testSampler.getSearchResults().toArray();
-        if (plan.length == 0) {
-        	return null;
-//            throw new RuntimeException("Could not find the TestPlan class!");
-        }
+		SearchByClass searcher = new SearchByClass(HTTPSamplerProxy.class);
+        testPlanTree.traverse(searcher);
         List<HTTPSamplerProxy> httpSamplers = new ArrayList<HTTPSamplerProxy>();
-        for (int i=0; i<plan.length; i++) {
-        	if ((plan[i]) instanceof HTTPSamplerProxy) {
-        		HTTPSamplerProxy sampler = (HTTPSamplerProxy) plan[i];
-        		httpSamplers.add(sampler);
-        	}
+        Iterator iter = searcher.getSearchResults().iterator();
+        while (iter.hasNext()) {
+        	HTTPSamplerProxy sampler = (HTTPSamplerProxy) iter.next();
+        	httpSamplers.add(sampler);
         }
-
 		return httpSamplers;
 	}
 

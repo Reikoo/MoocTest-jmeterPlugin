@@ -18,6 +18,7 @@ import nju.edu.cn.mooctest.net.plugin.common.Constants;
 import nju.edu.cn.mooctest.net.plugin.common.HttpConfig;
 import nju.edu.cn.mooctest.net.plugin.common.UserMode;
 import nju.edu.cn.mooctest.net.plugin.resources.objectsStructure.ProblemObject;
+import nju.edu.cn.mooctest.net.plugin.scriptprocessor.ScriptFileUtil;
 import nju.edu.cn.mooctest.net.plugin.util.encryption.EncryptionUtil;
 import nju.edu.cn.mooctest.net.plugin.util.file.FileUtil;
 import nju.edu.cn.mooctest.net.plugin.util.http.EvaluationUtil;
@@ -210,7 +211,7 @@ public class MooctestSubmit implements Command {
 		try {
 			// get script's address
 			//String scriptURL = LoadRecentProject.getRecentFile(0);
-			String scriptURL = EvaluationUtil.SaveScript(stuStr);
+			String scriptURL = ScriptFileUtil.SaveScript(stuStr);
 			log.info("SubmitScript ---file address: " + scriptURL);
 
 			// run script

@@ -4,7 +4,7 @@
 	<classpathentry kind="lib" path="lib/ApacheJMeter_components.jar" sourcepath="E:/apache-jmeter-2.12/apache-jmeter-2.12/lib/ext/ApacheJMeter_components.jar"/>
 	<classpathentry kind="lib" path="lib/ApacheJMeter_ftp.jar"/>
 	<classpathentry kind="lib" path="lib/ApacheJMeter_functions.jar"/>
-	<classpathentry kind="lib" path="lib/ApacheJMeter_http.jar"/>
+	<classpathentry kind="lib" path="lib/ApacheJMeter_http.jar" sourcepath="lib/ApacheJMeter_http.jar"/>
 	<classpathentry kind="lib" path="lib/ApacheJMeter_java.jar"/>
 	<classpathentry kind="lib" path="lib/ApacheJMeter_jdbc.jar"/>
 	<classpathentry kind="lib" path="lib/ApacheJMeter_jms.jar"/>
@@ -76,5 +76,7 @@
 	<classpathentry kind="lib" path="lib/ant.jar"/>
 	<classpathentry kind="lib" path="lib/java-unrar-0.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/dom4j-full.jar"/>
+	<classpathentry kind="lib" path="lib/jaxen-full.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
