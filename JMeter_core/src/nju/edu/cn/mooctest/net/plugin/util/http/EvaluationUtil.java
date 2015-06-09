@@ -284,6 +284,7 @@ public class EvaluationUtil {
 	}
 	*/
 	
+	/**
 	private static double sendHTTPRequests(Map<String, HTTPSamplerProxy> samplers, 
 			Map<String, CSVFile> dataFiles) {
 		Iterator it=samplers.keySet().iterator();
@@ -379,6 +380,7 @@ public class EvaluationUtil {
 		success = 1.0 * successNum / totalNum;
 		return success;
 	}
+	*/
 	
 	private static String preProcess(String urlStr) {
 		Pattern p = Pattern.compile("\\$\\{__CSVRead(.+?)\\}");
@@ -445,6 +447,7 @@ public class EvaluationUtil {
 		List<String> urlList = new ArrayList<String>();
 		Iterator it=samplers.keySet().iterator();
 		double success = 0;
+		boolean fileNotFound = false;
 		int totalNum = 0;
 		int successNum = 0;
 		while(it.hasNext()){    
@@ -497,9 +500,18 @@ public class EvaluationUtil {
 			     try {
 					Iterator iter = dataFiles.keySet().iterator();
 					while (iter.hasNext()) {
-						String name = iter.next().toString();
+						Object o = iter.next();
+						if (o == null) {
+							fileNotFound = true;
+							break;
+						}
+						String name = o.toString();
 						CSVFile file = dataFiles.get(name);
 						List<Map<String, String>> vars = file.getVariables();
+						if (vars == null) {
+							fileNotFound = true;
+							break;
+						}
 						for (int i=0; i<vars.size(); i++) {
 							totalNum ++;
 							String urlStr = sampler.getUrl().toString();
@@ -557,7 +569,11 @@ public class EvaluationUtil {
 				}
 		     }
 		}
-		success = 1.0 * successNum / totalNum;
+		if (totalNum == 0) {
+			success = 0;
+		} else {
+			success = 1.0 * successNum / totalNum;
+		}
 		Map<String, Double> scores = new HashMap<String, Double>();
 		double value1 = 0;
 		double value2 = 0;
@@ -566,7 +582,8 @@ public class EvaluationUtil {
 		JSONObject maxErrorJson= jsonEvaluation.getJSONObject("max_error");
 		String key_words = parameterJson.getString("key_words");
 		String[] keyWords = key_words.split(",");
-		if (stats.get("Config Items") == 0 ||dataFiles == null || dataFiles.isEmpty()) {
+		if (stats.get("Config Items") == 0 ||dataFiles == null 
+				|| dataFiles.isEmpty() || fileNotFound) {
 			value1 = 0;
 		} else {
 			if (keyWords == null || keyWords.length == 0)
